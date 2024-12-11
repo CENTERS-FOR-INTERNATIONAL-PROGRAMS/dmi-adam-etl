@@ -103,6 +103,7 @@ FROM {{ source('couchdb', 'couchdb') }}
 WHERE
     (doc ->> 'type')::text = 'dform'
 AND
-    (doc -> 'DFields' -> 'values' -> 'disease' ->> 'df_value')::text = 'Monkey Pox'
+    -- (doc -> 'DFields' -> 'values' -> 'disease' ->> 'df_value')::text = 'Monkey Pox'
+    (doc ->> 'mform_id')::text = '1cb1ce40-52f3-11ef-b3d2-414aed6a4e0a'
 AND
     (doc -> 'ident') IS NOT NULL
