@@ -1,4 +1,4 @@
-SELECT 
+SELECT
     (doc ->> '_id')::text AS doc_id,
     (doc ->> '_rev')::text AS doc_rev,
     (doc ->> 'type')::text AS doc_type,

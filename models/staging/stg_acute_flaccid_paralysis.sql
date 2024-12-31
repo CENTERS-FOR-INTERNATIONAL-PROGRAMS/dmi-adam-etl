@@ -133,4 +133,4 @@ WHERE
 AND
     (doc -> 'DFields' -> 'values' -> 'disease' ->> 'df_value')::text = 'AFP'
 AND
-    (doc ->> 'ident') IS NOT NULL;
+    (doc ->> 'ident') IS NOT NULL
