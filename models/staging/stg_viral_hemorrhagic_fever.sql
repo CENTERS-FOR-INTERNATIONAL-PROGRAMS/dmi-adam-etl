@@ -183,6 +183,4 @@ FROM {{ source('couchdb', 'couchdb') }}
 WHERE 
     (doc ->> 'type') = 'dform'
 AND
-    (doc -> 'DFields' -> 'values' -> 'syndrome' ->> 'df_value')::text = 'VHF'
-AND
-    (doc ->> 'ident') IS NOT NULL
+    (doc ->> 'mform_id')::text = 'a78b43f0-e4f0-11ee-a969-7765f1f98ba9'

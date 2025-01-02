@@ -121,5 +121,3 @@ WHERE
     (doc ->> 'type')::text = 'dform'
 AND
     (doc ->> 'mform_id')::text = '16eddd50-968c-11ef-9fa9-ff2039b96ab1'
-AND
-    (doc ->> 'ident') IS NOT NULL

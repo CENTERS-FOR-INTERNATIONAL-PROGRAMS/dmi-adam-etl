@@ -112,6 +112,4 @@ FROM {{ source('couchdb', 'couchdb') }}
 WHERE 
     (doc ->> 'type')::text = 'dform'
 AND
-    (doc -> 'DFields' -> 'values' -> 'disease' ->> 'df_value')::text = 'Meningitis'
-AND
-    (doc ->> 'ident') IS NOT NULL
+    (doc ->> 'mform_id')::text = '4e3defa0-039f-11ef-a3ca-7532751d65a4'

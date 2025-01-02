@@ -49,6 +49,4 @@ FROM {{ source('couchdb', 'couchdb') }}
 WHERE
     (doc ->> 'type')::text = 'dform'
 AND
-    (doc -> 'DForms' -> 'sample_information_water_sampling') IS NOT NULL
-AND
-    (doc -> 'ident') IS NOT NULL
+    (doc ->> 'mform_id')::text = '68f3e040-42bd-11ef-a52d-e161399945c1'

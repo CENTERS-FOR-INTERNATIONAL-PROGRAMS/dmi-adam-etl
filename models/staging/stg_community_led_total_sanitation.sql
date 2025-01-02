@@ -40,6 +40,4 @@ FROM {{ source('couchdb', 'couchdb') }}
 WHERE
     (doc ->> 'type')::text = 'dform'
 AND
-    (doc -> 'DFields' -> 'values' -> 'village' ->> 'df_value')::text IS NOT NULL
-AND
-    (doc -> 'ident') IS NOT NULL
+    (doc ->> 'mform_id')::text = '920db9a0-07db-11ef-a2e5-f145755ab70a'
