@@ -1,4 +1,15 @@
 SELECT
+    (doc ->> '_id')::text AS doc_id,
+    (doc ->> '_rev')::text AS doc_rev,
+    (doc ->> 'type')::text AS doc_type,
+    (doc ->> 'df_complete')::text AS df_complete,
+    (doc ->> 'df_submitted')::text AS df_submitted,
+    (doc ->> 'df_parent_complete')::text AS df_parent_complete,
+    (doc ->> 'event_ident')::text AS event_ident,
+    (doc ->> 'mform_event')::text AS mform_event,
+    (doc ->> 'parent_ident')::text AS parent_ident,
+    (doc -> 'created_scope' ->> 'user_role')::text AS created_role,
+    (doc -> 'modified_scope' ->> 'user_role')::text AS modified_role,
     (doc ->> 'mform_id')::text AS mform_id,
     (doc ->> 'fform_id')::text AS form_id,
     (doc ->> 'ident')::text AS case_unique_id,
@@ -49,6 +60,4 @@ FROM {{ source('couchdb', 'couchdb') }}
 WHERE
     (doc ->> 'type')::text = 'dform'
 AND
-    (doc -> 'DForms' -> 'sample_information_water_sampling') IS NOT NULL
-AND
-    (doc -> 'ident') IS NOT NULL
+    (doc ->> 'mform_id')::text = '68f3e040-42bd-11ef-a52d-e161399945c1'

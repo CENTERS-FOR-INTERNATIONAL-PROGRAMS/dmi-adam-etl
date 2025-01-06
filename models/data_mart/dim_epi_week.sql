@@ -14,7 +14,7 @@ WITH epi_weeks AS (
         distinct date_trunc('week', date) - interval '1 day' AS start_of_week,
         date_trunc('week', date) + interval '5 days' AS end_of_week
     FROM
-        {{ ref('stg_date_range') }}
+        {{ ref('int_date_range') }}
 ),
 final AS (
     SELECT

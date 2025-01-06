@@ -15,6 +15,9 @@
       {'columns': ['admitted']},
       {'columns': ['discharged']},
       {'columns': ['died']},
+      {'columns': ['probable']},
+      {'columns': ['contact']},
+      {'columns': ['completed']},
     ]
 )}}
 
@@ -36,12 +39,14 @@ WITH acute_flaccid_paralysis AS (
         (CASE WHEN outcome = 'Admitted' THEN 1 ELSE 0 END)::integer AS admitted,
         (CASE WHEN outcome = 'Discharged' THEN 1 ELSE 0 END)::integer AS discharged,
         (CASE WHEN outcome = 'Dead' THEN 1 ELSE 0 END)::integer AS died,
+        (CASE WHEN type_of_case = 'Probable' THEN 1 ELSE 0 END)::integer AS probable,
+        (CASE WHEN type_of_case = 'Contact' THEN 1 ELSE 0 END)::integer AS contact,
         location_accuracy,
         location_latitude,
         location_longitude,
-        current_date AS load_date
+        current_date AS load_date,
+        'Draft'::text AS completed
     FROM {{ ref('int_acute_flaccid_paralysis') }} AS int_acute_flaccid_paralysis
-    WHERE case_date IS NOT NULL
 ), community_led_total_sanitation AS (
     SELECT
         'Community Led Total Sanitation' AS syndrome,
@@ -60,12 +65,14 @@ WITH acute_flaccid_paralysis AS (
         (0)::integer AS admitted,
         (0)::integer AS discharged,
         (0)::integer AS died,
+        (0)::integer AS probable,
+        (0)::integer AS contact,
         location_accuracy,
         location_latitude,
         location_longitude,
-        current_date AS load_date
+        current_date AS load_date,
+        'Draft'::text AS completed
     FROM {{ ref('int_community_led_total_sanitation') }}
-    WHERE case_date IS NOT NULL
 ), diarrhoeal_disease AS (
     SELECT
         syndrome,
@@ -84,13 +91,41 @@ WITH acute_flaccid_paralysis AS (
         (CASE WHEN status_of_patient = 'Admitted' THEN 1 ELSE 0 END)::integer AS admitted,
         (CASE WHEN status_of_patient = 'Discharged' THEN 1 ELSE 0 END)::integer AS discharged,
         (CASE WHEN outcome_of_patient = 'Dead' THEN 1 ELSE 0 END)::integer AS died,
+        (CASE WHEN type_of_case = 'Probable' THEN 1 ELSE 0 END)::integer AS probable,
+        (CASE WHEN type_of_case = 'Contact' THEN 1 ELSE 0 END)::integer AS contact,
         location_accuracy,
         location_latitude,
         location_longitude,
-        current_date AS load_date
+        current_date AS load_date,
+        'Draft'::text AS completed
     FROM
         {{ ref('int_diarrhoeal_disease') }}  as int_diarrhoeal_disease
-    WHERE case_date IS NOT NULL
+), marburg_traveller AS (
+    SELECT
+        syndrome,
+        'Marburg' AS disease,
+        case_date,
+        epi_week,
+        CASE WHEN type_of_case IS NOT NULL THEN type_of_case ELSE 'Unknown' END AS type_of_case,
+        sex,
+        age_group,
+        country,
+        county,
+        subcounty,
+        (1)::integer AS suspected,
+        null::integer AS tested,
+        null::integer AS confirmed,
+        null::integer AS admitted,
+        null::integer AS discharged,
+        null::integer AS died,
+        (CASE WHEN type_of_case = 'Probable' THEN 1 ELSE 0 END)::integer AS probable,
+        (CASE WHEN type_of_case = 'Contact' THEN 1 ELSE 0 END)::integer AS contact,
+        location_accuracy,
+        location_latitude,
+        location_longitude,
+        current_date AS load_date,
+        completed
+    FROM {{ ref('int_marburg_traveler') }}
 ), measles AS (
     SELECT
         syndrome,
@@ -109,12 +144,14 @@ WITH acute_flaccid_paralysis AS (
         (CASE WHEN outcome = 'Admitted' THEN 1 WHEN status_of_patient = 'Admitted' THEN 1 ELSE 0 END)::integer AS admitted,
         (CASE WHEN outcome = 'Discharged' THEN 1 WHEN status_of_patient = 'Discharged' THEN 1 ELSE 0 END)::integer AS discharged,
         (CASE WHEN outcome = 'Dead' THEN 1 ELSE 0 END)::integer AS died,
+        (CASE WHEN type_of_case = 'Probable' THEN 1 ELSE 0 END)::integer AS probable,
+        (CASE WHEN type_of_case = 'Contact' THEN 1 ELSE 0 END)::integer AS contact,
         location_accuracy,
         location_latitude,
         location_longitude,
-        current_date AS load_date
+        current_date AS load_date,
+        'Draft'::text AS completed
     FROM {{ ref('int_measles') }}
-    WHERE case_date IS NOT NULL
 ), meningitis AS (
     SELECT
         syndrome,
@@ -133,16 +170,18 @@ WITH acute_flaccid_paralysis AS (
         (CASE WHEN patient_status = 'Admitted' THEN 1 ELSE 0 END)::integer AS admitted,
         (CASE WHEN patient_status = 'Discharged' THEN 1 ELSE 0 END)::integer AS discharged,
         (CASE WHEN patient_status = 'Dead' THEN 1 ELSE 0 END)::integer AS died,
+        (CASE WHEN type_of_case = 'Probable' THEN 1 ELSE 0 END)::integer AS probable,
+        (CASE WHEN type_of_case = 'Contact' THEN 1 ELSE 0 END)::integer AS contact,
         location_accuracy,
         location_latitude,
         location_longitude,
-        current_date AS load_date
+        current_date AS load_date,
+        'Draft'::text AS completed
     FROM {{ ref('int_meningitis') }}
-    WHERE case_date IS NOT NULL
-), monkey_pox AS (
+), mpox AS (
     SELECT
         syndrome,
-        disease,
+        'Monkey Pox' AS disease,
         case_date,
         epi_week,
         CASE WHEN type_of_case IS NOT NULL THEN type_of_case ELSE 'Unknown' END AS type_of_case,
@@ -153,16 +192,18 @@ WITH acute_flaccid_paralysis AS (
         subcounty,
         (1)::integer AS suspected,
         (CASE WHEN samples_were_collected = 'Yes' THEN 1 ELSE 0 END)::integer AS tested,
-        (CASE WHEN result_of_laboratory_test = 'Positive' THEN 1 WHEN type_of_case = 'Confirmed' THEN 1 ELSE 0 END)::integer AS confirmed,
+        (CASE WHEN type_of_case = 'Confirmed' THEN 1 ELSE 0 END)::integer AS confirmed,
         (CASE WHEN outcome_of_patient = 'Admitted' THEN 1 WHEN status_of_patient = 'Admitted' THEN 1 ELSE 0 END)::integer AS admitted,
         (CASE WHEN outcome_of_patient = 'Discharged' THEN 1 WHEN status_of_patient = 'Discharged' THEN 1 ELSE 0 END)::integer AS discharged,
         (CASE WHEN outcome_of_patient = 'Dead' THEN 1 ELSE 0 END)::integer AS died,
+        (CASE WHEN type_of_case = 'Probable' THEN 1 ELSE 0 END)::integer AS probable,
+        (CASE WHEN type_of_case = 'Contact' THEN 1 ELSE 0 END)::integer AS contact,
         location_accuracy,
         location_latitude,
         location_longitude,
-        current_date AS load_date
-    FROM {{ ref('int_monkey_pox') }}
-    WHERE case_date IS NOT NULL
+        current_date AS load_date,
+        completed
+    FROM {{ ref('int_mpox') }}
 ), neonatal_tetanus AS (
     SELECT
         ''::text AS syndrome,
@@ -181,12 +222,14 @@ WITH acute_flaccid_paralysis AS (
         (CASE WHEN status_of_patient = 'Admitted' THEN 1 ELSE 0 END)::integer AS admitted,
         (CASE WHEN status_of_patient = 'Discharged' THEN 1 ELSE 0 END)::integer AS discharged,
         (CASE WHEN outcome_of_patient = 'Dead' THEN 1 ELSE 0 END)::integer AS died,
+        (CASE WHEN type_of_case = 'Probable' THEN 1 ELSE 0 END)::integer AS probable,
+        (CASE WHEN type_of_case = 'Contact' THEN 1 ELSE 0 END)::integer AS contact,
         location_accuracy,
         location_latitude,
         location_longitude,
-        current_date AS load_date
+        current_date AS load_date,
+        'Draft'::text AS completed
     FROM {{ ref('int_neonatal_tetanus') }}
-    WHERE case_date IS NOT NULL
 ), rabies AS (
     SELECT
         syndrome,
@@ -205,12 +248,14 @@ WITH acute_flaccid_paralysis AS (
         (CASE WHEN admitted = 'Yes' THEN 1 ELSE 0 END)::integer AS admitted,
         (CASE WHEN patient_status = 'Discharged' THEN 1 ELSE 0 END)::integer AS discharged,
         (CASE WHEN patient_status = 'Dead' THEN 1 ELSE 0 END)::integer AS died,
+        (CASE WHEN type_of_case = 'Probable' THEN 1 ELSE 0 END)::integer AS probable,
+        (CASE WHEN type_of_case = 'Contact' THEN 1 ELSE 0 END)::integer AS contact,
         location_accuracy,
         location_latitude,
         location_longitude,
-        current_date AS load_date
+        current_date AS load_date,
+        'Draft'::text AS completed
     FROM {{ ref('int_rabies') }}
-    WHERE case_date IS NOT NULL
 ), respiratory_syndrome AS (
     SELECT
         syndrome,
@@ -229,12 +274,14 @@ WITH acute_flaccid_paralysis AS (
         (CASE WHEN date_of_admission IS NOT NULL THEN 1 ELSE 0 END)::integer AS admitted,
         (CASE WHEN date_of_discharge IS NOT NULL THEN 1 ELSE 0 END)::integer AS discharged,
         (CASE WHEN date_of_death IS NOT NULL THEN 1 ELSE 0 END)::integer AS died,
+        (CASE WHEN type_of_case = 'Probable' THEN 1 ELSE 0 END)::integer AS probable,
+        (CASE WHEN type_of_case = 'Contact' THEN 1 ELSE 0 END)::integer AS contact,
         location_accuracy,
         location_latitude,
         location_longitude,
-        current_date AS load_date
+        current_date AS load_date,
+        'Draft'::text AS completed
     FROM {{ ref('int_respiratory_syndrome') }}
-    WHERE case_date IS NOT NULL
 ), sampling_form_for_fortified_foods AS (
     SELECT
         'Sampling Form for Fortified Foods' AS syndrome,
@@ -253,12 +300,14 @@ WITH acute_flaccid_paralysis AS (
         (0)::integer AS admitted,
         (0)::integer AS discharged,
         (0)::integer AS died,
+        (0)::integer AS probable,
+        (0)::integer AS contact,
         location_accuracy,
         location_latitude,
         location_longitude,
-        current_date AS load_date
+        current_date AS load_date,
+        'Draft'::text AS completed
     FROM {{ ref('int_sampling_form_for_fortified_foods') }}
-    WHERE case_date IS NOT NULL
 ), viral_hemorrhagic_fever AS (
     SELECT
         syndrome,
@@ -277,12 +326,14 @@ WITH acute_flaccid_paralysis AS (
         (CASE WHEN admitted = 'Yes' THEN 1 WHEN outcome = 'Admitted' THEN 1 WHEN admission_date IS NOT NULL THEN 1 ELSE 0 END)::integer AS admitted,
         (CASE WHEN patient_status = 'Discharged' THEN 1 WHEN discharge_date IS NOT NULL THEN 1 ELSE 0 END)::integer AS discharged,
         (CASE WHEN patient_status = 'Died' THEN 1 WHEN outcome = 'Dead' THEN 1 ELSE 0 END)::integer AS died,
+        (CASE WHEN type_of_case = 'Probable' THEN 1 ELSE 0 END)::integer AS probable,
+        (CASE WHEN type_of_case = 'Contact' THEN 1 ELSE 0 END)::integer AS contact,
         location_accuracy,
         location_latitude,
         location_longitude,
-        current_date AS load_date
+        current_date AS load_date,
+        'Draft'::text AS completed
     FROM {{ ref('int_viral_hemorrhagic_fever') }}
-    WHERE case_date IS NOT NULL
 )
 
 SELECT * FROM acute_flaccid_paralysis
@@ -295,7 +346,7 @@ SELECT * FROM measles
 UNION
 SELECT * FROM meningitis
 UNION
-SELECT * FROM monkey_pox
+SELECT * FROM mpox
 UNION
 SELECT * FROM neonatal_tetanus
 UNION

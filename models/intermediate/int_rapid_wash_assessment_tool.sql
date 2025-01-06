@@ -1,9 +1,16 @@
 SELECT
+    doc_id::text AS id,
+    parent_ident::text AS parent_id,
+    name_of_head_of_household || ' (' || created_timestamp || ')' AS contact_tree_label,
     mform_id::text AS mform_id,
+    mform_event::text AS mform_event,
+    event_ident::text AS event_id,
     form_id::text AS form_id,
     case_unique_id::text AS case_unique_id,
-    CASE WHEN substring(created_timestamp from 1 for 10) ~ '^\d{2}/\d{2}/\d{4}$' THEN to_timestamp(substring(created_timestamp from 1 for 10), 'DD/MM/YYYY')::date ELSE NULL END AS case_date,
-    CASE WHEN substring(created_timestamp from 1 for 10) ~ '^\d{2}/\d{2}/\d{4}$' THEN to_char(to_timestamp(substring(created_timestamp from 1 for 10), 'DD/MM/YYYY'), 'YYYY "W"IW') ELSE NULL END AS epi_week,
+    (CASE WHEN df_complete::text = 'true' THEN 'Complete' ELSE 'Draft' END)::text AS completed,
+    (CASE WHEN df_parent_complete::text = 'true' THEN 'Complete' ELSE 'Draft' END)::text AS parent_completed,
+    created_role::text AS created_role,
+    modified_role::text AS modified_role,
     created_username::text AS created_username,
     created_timestamp::text AS created_timestamp,
     modified_username::text AS modified_username,
@@ -11,6 +18,10 @@ SELECT
     location_accuracy::text AS location_accuracy,
     location_latitude::text AS location_latitude,
     location_longitude::text AS location_longitude,
+    ''::text AS syndrome,
+    'Wash'::text AS disease,
+    CASE WHEN substring(created_timestamp from 1 for 10) ~ '^\d{2}/\d{2}/\d{4}$' THEN to_timestamp(substring(created_timestamp from 1 for 10), 'DD/MM/YYYY')::date ELSE NULL END AS case_date,
+    CASE WHEN substring(created_timestamp from 1 for 10) ~ '^\d{2}/\d{2}/\d{4}$' THEN to_char(to_timestamp(substring(created_timestamp from 1 for 10), 'DD/MM/YYYY'), 'YYYY "W"IW') ELSE NULL END AS epi_week,
     sources_of_water::text AS sources_of_water,
     sources_of_water_other::text AS sources_of_water_other,
     water_source_is_protected::text AS water_source_is_protected,
@@ -54,4 +65,3 @@ SELECT
     title_population::text AS title_population,
     population_of_household_under_five_years::text AS population_of_household_under_five_years
 FROM {{ ref('stg_rapid_wash_assessment_tool') }}
-WHERE created_timestamp IS NOT NULL

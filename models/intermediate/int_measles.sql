@@ -1,7 +1,16 @@
 SELECT
+    doc_id::text AS id,
+    parent_ident::text AS parent_id,
+    given || ' ' || family || ' (' || type_of_case || ')' AS contact_tree_label,
     mform_id::text AS mform_id,
+    mform_event::text AS mform_event,
+    event_ident::text AS event_id,
     form_id::text AS form_id,
     case_unique_id::text AS case_unique_id,
+    (CASE WHEN df_complete::text = 'true' THEN 'Complete' ELSE 'Draft' END)::text AS completed,
+    (CASE WHEN df_parent_complete::text = 'true' THEN 'Complete' ELSE 'Draft' END)::text AS parent_completed,
+    created_role::text AS created_role,
+    modified_role::text AS modified_role,
     created_username::text AS created_username,
     created_timestamp::text AS created_timestamp,
     modified_username::text AS modified_username,
@@ -16,9 +25,8 @@ SELECT
     epid::text AS epid,
     date_of_investigation::text AS date_of_investigation,
     type_of_case::text AS type_of_case,
-    unique_id_of_case::text AS unique_id_of_case,
-    given_name::text AS given_name,
-    family_name::text AS family_name,
+    given::text AS given_name,
+    family::text AS family_name,
     sex::text AS sex,
     CASE 
         WHEN age_years ~ '^[0-9]+(\.[0-9]+)?$' THEN age_years::float
@@ -28,6 +36,10 @@ SELECT
         WHEN age_months ~ '^[0-9]+(\.[0-9]+)?$' THEN age_months::float
         ELSE NULL
     END AS age_months,
+    CASE 
+        WHEN age_days ~ '^[0-9]+(\.[0-9]+)?$' THEN age_days::float
+        ELSE NULL
+    END AS age_days,
     CASE
         WHEN NOT (age_years ~ '^[0-9]+(\.[0-9]+)?$') THEN 'Unknown'
         WHEN age_years::float < 2 THEN '0-2 yrs'
@@ -40,9 +52,15 @@ SELECT
     phone_number::text AS phone_number,
     occupation::text AS occupation,
     occupation_other::text AS occupation_other,
+    marital_status::text AS marital_status,
+    case_is_pregnant::text AS case_is_pregnant,
+    case_has_insurance_cover::text AS case_has_insurance_cover,
+    level_of_education::text AS level_of_education,
+    type_of_residence::text AS type_of_residence,
     country::text AS country,
     county::text AS county,
     subcounty::text AS subcounty,
+    ward::text AS ward,
     town_village_camp::text AS town_village_camp,
     landmark::text AS landmark,
     title_residence::text AS title_residence,
@@ -92,4 +110,3 @@ SELECT
     status_of_patient::text AS status_of_patient,
     date_of_discharge::text AS date_of_discharge
 FROM {{ ref('stg_measles') }}
-WHERE date_of_onset_rash IS NOT NULL

@@ -13,7 +13,7 @@
     ]
 )}}
 
-{% set categories = ['Suspected', 'Tested', 'Confirmed', 'Admitted', 'Recovered', 'Died'] %}
+{% set categories = ['Suspected', 'Probable', 'Tested', 'Confirmed', 'Admitted', 'Recovered', 'Died'] %}
 {% set diseases = ['\'AFP\'', '\'Measles\'', '\'Meningitis\'', '\'Monkey Pox\'', '\'Neonatal Tetanus\'', '\'Rabies\''] %}
 {% set syndromes = ['\'Diarrhoeal Disease\'', '\'Respiratory Syndrome\'', '\'VHF\''] %}
 
@@ -28,6 +28,7 @@ WITH base_data AS (
         county,
         subcounty,
         COUNT(*) AS suspected,
+        SUM(CASE WHEN probable = 1 THEN 1 ELSE 0 END) AS probable,
         SUM(CASE WHEN tested = 1 THEN 1 ELSE 0 END) AS tested,
         SUM(CASE WHEN confirmed = 1 THEN 1 ELSE 0 END) AS confirmed,
         SUM(CASE WHEN admitted = 1 THEN 1 ELSE 0 END) AS admitted,
@@ -52,6 +53,8 @@ final_data AS (
         '{{ category }}' AS category,
         {% if category == 'Suspected' %}
         COALESCE(suspected, 0) AS cases
+        {% elif category == 'Probable' %}
+        COALESCE(probable, 0) AS cases
         {% elif category == 'Tested' %}
         COALESCE(tested, 0) AS cases
         {% elif category == 'Confirmed' %}
