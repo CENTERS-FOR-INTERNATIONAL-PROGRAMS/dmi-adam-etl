@@ -1,6 +1,10 @@
 {{ config(
     materialized = 'table',
     indexes=[
+      {'columns': ['id']},
+      {'columns': ['parent_id']},
+      {'columns': ['event_id']},
+      {'columns': ['completed']},
       {'columns': ['case_date']},
       {'columns': ['epi_week']},
       {'columns': ['county']},
@@ -9,11 +13,18 @@
 )}}
 
 SELECT
+    id,
+    parent_id,
+    contact_tree_label,
     mform_id,
+    mform_event,
+    event_id,
     form_id,
     case_unique_id,
-    case_date,
-    epi_week,
+    completed,
+    parent_completed,
+    created_role,
+    modified_role,
     created_username,
     created_timestamp,
     modified_username,
@@ -21,6 +32,10 @@ SELECT
     location_accuracy,
     location_latitude,
     location_longitude,
+    case_date,
+    epi_week,
+    syndrome,
+    disease,
     sample_number,
     date_of_sample_collection,
     time_of_sample_collection,

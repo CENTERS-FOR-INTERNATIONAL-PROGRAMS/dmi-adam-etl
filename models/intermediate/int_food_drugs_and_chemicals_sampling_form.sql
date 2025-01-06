@@ -1,7 +1,16 @@
 SELECT
+    doc_id::text AS id,
+    parent_ident::text AS parent_id,
+    name_of_product || ' (' || date_of_sample_collection || ')' AS contact_tree_label,
+    mform_id::text AS mform_id,
+    mform_event::text AS mform_event,
+    event_ident::text AS event_id,
+    form_id::text AS form_id,
     case_unique_id::text AS case_unique_id,
-    CASE WHEN date_of_sample_collection ~ '^\d{2}/\d{2}/\d{4}$' THEN to_timestamp(date_of_sample_collection, 'DD/MM/YYYY')::date ELSE NULL END AS case_date,
-    CASE WHEN date_of_sample_collection ~ '^\d{2}/\d{2}/\d{4}$' THEN to_char(to_timestamp(date_of_sample_collection, 'DD/MM/YYYY'), 'YYYY "W"IW') ELSE NULL END AS epi_week,
+    (CASE WHEN df_complete::text = 'true' THEN 'Complete' ELSE 'Draft' END)::text AS completed,
+    (CASE WHEN df_parent_complete::text = 'true' THEN 'Complete' ELSE 'Draft' END)::text AS parent_completed,
+    created_role::text AS created_role,
+    modified_role::text AS modified_role,
     created_username::text AS created_username,
     created_timestamp::text AS created_timestamp,
     modified_username::text AS modified_username,
@@ -9,6 +18,10 @@ SELECT
     location_accuracy::text AS location_accuracy,
     location_latitude::text AS location_latitude,
     location_longitude::text AS location_longitude,
+    ''::text AS syndrome,
+    'Food Drugs Chemicals Sampling'::text AS disease,
+    CASE WHEN date_of_sample_collection ~ '^\d{2}/\d{2}/\d{4}$' THEN to_timestamp(date_of_sample_collection, 'DD/MM/YYYY')::date ELSE NULL END AS case_date,
+    CASE WHEN date_of_sample_collection ~ '^\d{2}/\d{2}/\d{4}$' THEN to_char(to_timestamp(date_of_sample_collection, 'DD/MM/YYYY'), 'YYYY "W"IW') ELSE NULL END AS epi_week,
     sample_number::text AS sample_number,
     date_of_sample_collection::text AS date_of_sample_collection,
     time_of_sample_collection::text AS time_of_sample_collection,
@@ -59,4 +72,3 @@ SELECT
     premise_phone_number::text AS premise_phone_number,
     premise_email_address::text AS premise_email_address
 FROM {{ ref('stg_food_drugs_and_chemicals_sampling_form') }}
-WHERE date_of_sample_collection IS NOT NULL

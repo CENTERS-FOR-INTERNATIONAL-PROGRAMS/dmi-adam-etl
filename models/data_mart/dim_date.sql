@@ -21,6 +21,6 @@ SELECT
     to_char(date, 'YYYY "W"IW') AS epi_week,
     current_date AS load_date
 FROM
-    {{ ref('stg_date_range') }}
+    {{ ref('int_date_range') }}
 ORDER BY
     date DESC

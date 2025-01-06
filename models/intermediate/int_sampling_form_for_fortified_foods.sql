@@ -53,4 +53,3 @@ SELECT
     collector_phone_number::text AS collector_phone_number,
     collectors_email_address::text AS collectors_email_address
 FROM {{ ref('stg_sampling_form_for_fortified_foods') }}
-WHERE date_of_investigation IS NOT NULL
