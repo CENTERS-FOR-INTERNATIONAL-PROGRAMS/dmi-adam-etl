@@ -45,7 +45,7 @@ WITH acute_flaccid_paralysis AS (
         location_latitude,
         location_longitude,
         current_date AS load_date,
-        'Draft'::text AS completed
+        completed
     FROM {{ ref('int_acute_flaccid_paralysis') }} AS int_acute_flaccid_paralysis
 ), community_led_total_sanitation AS (
     SELECT
@@ -71,7 +71,7 @@ WITH acute_flaccid_paralysis AS (
         location_latitude,
         location_longitude,
         current_date AS load_date,
-        'Draft'::text AS completed
+        ''::text AS completed
     FROM {{ ref('int_community_led_total_sanitation') }}
 ), diarrhoeal_disease AS (
     SELECT
@@ -97,7 +97,7 @@ WITH acute_flaccid_paralysis AS (
         location_latitude,
         location_longitude,
         current_date AS load_date,
-        'Draft'::text AS completed
+        completed
     FROM
         {{ ref('int_diarrhoeal_disease') }}  as int_diarrhoeal_disease
 ), marburg_traveller AS (
@@ -150,7 +150,7 @@ WITH acute_flaccid_paralysis AS (
         location_latitude,
         location_longitude,
         current_date AS load_date,
-        'Draft'::text AS completed
+        completed
     FROM {{ ref('int_measles') }}
 ), meningitis AS (
     SELECT
@@ -176,7 +176,7 @@ WITH acute_flaccid_paralysis AS (
         location_latitude,
         location_longitude,
         current_date AS load_date,
-        'Draft'::text AS completed
+        completed
     FROM {{ ref('int_meningitis') }}
 ), mpox AS (
     SELECT
@@ -228,7 +228,7 @@ WITH acute_flaccid_paralysis AS (
         location_latitude,
         location_longitude,
         current_date AS load_date,
-        'Draft'::text AS completed
+        completed
     FROM {{ ref('int_neonatal_tetanus') }}
 ), rabies AS (
     SELECT
@@ -254,7 +254,7 @@ WITH acute_flaccid_paralysis AS (
         location_latitude,
         location_longitude,
         current_date AS load_date,
-        'Draft'::text AS completed
+        completed
     FROM {{ ref('int_rabies') }}
 ), respiratory_syndrome AS (
     SELECT
@@ -280,7 +280,7 @@ WITH acute_flaccid_paralysis AS (
         location_latitude,
         location_longitude,
         current_date AS load_date,
-        'Draft'::text AS completed
+        completed
     FROM {{ ref('int_respiratory_syndrome') }}
 ), sampling_form_for_fortified_foods AS (
     SELECT
@@ -306,7 +306,7 @@ WITH acute_flaccid_paralysis AS (
         location_latitude,
         location_longitude,
         current_date AS load_date,
-        'Draft'::text AS completed
+        ''::text AS completed
     FROM {{ ref('int_sampling_form_for_fortified_foods') }}
 ), viral_hemorrhagic_fever AS (
     SELECT
@@ -332,7 +332,7 @@ WITH acute_flaccid_paralysis AS (
         location_latitude,
         location_longitude,
         current_date AS load_date,
-        'Draft'::text AS completed
+        completed
     FROM {{ ref('int_viral_hemorrhagic_fever') }}
 )
 
