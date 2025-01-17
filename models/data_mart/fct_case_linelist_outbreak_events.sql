@@ -1,0 +1,47 @@
+{{ config(
+    materialized = 'table',
+    indexes=[
+      {'columns': ['id']},
+      {'columns': ['parent_id']},
+      {'columns': ['event_id']},
+      {'columns': ['completed']},
+      {'columns': ['case_date']},
+      {'columns': ['epi_week']},
+      {'columns': ['county']},
+      {'columns': ['subcounty']},
+    ]
+)}}
+
+SELECT
+    id,
+    parent_id,
+    contact_tree_label,
+    mform_id,
+    mform_event,
+    event_id,
+    form_id,
+    case_unique_id,
+    completed,
+    parent_completed,
+    created_role,
+    modified_role,
+    created_username,
+    created_timestamp,
+    modified_username,
+    modified_timestamp,
+    location_accuracy,
+    location_latitude,
+    location_longitude,
+    syndrome,
+    disease,
+    case_date,
+    epi_week,
+    county,
+    subcounty,
+    event_description,
+    mode_of_transmission,
+    method_of_detection,
+    date_of_emergence,
+    date_of_detection,
+    date_of_notification
+FROM {{ ref('int_outbreak_events') }}
