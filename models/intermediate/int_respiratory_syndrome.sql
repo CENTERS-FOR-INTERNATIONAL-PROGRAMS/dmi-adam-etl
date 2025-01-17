@@ -116,3 +116,4 @@ SELECT
     laboratory_facility_name::text AS laboratory_facility_name,
     laboratory_facility_name_other::text AS laboratory_facility_name_other
 FROM {{ ref('stg_respiratory_syndrome') }}
+WHERE df_complete::text = 'true'

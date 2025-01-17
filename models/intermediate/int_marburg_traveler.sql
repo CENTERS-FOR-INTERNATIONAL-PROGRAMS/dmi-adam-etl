@@ -91,3 +91,4 @@ SELECT
     local_county::text AS county,
     local_sublocation_estate::text AS subcounty
 FROM {{ ref('stg_marburg_traveler') }}
+WHERE df_complete::text = 'true'

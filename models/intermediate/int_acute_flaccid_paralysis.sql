@@ -142,3 +142,4 @@ SELECT
     source_of_vaccination_information::text AS source_of_vaccination_information,
     source_of_vaccination_information_other::text AS source_of_vaccination_information_other
 FROM {{ ref('stg_acute_flaccid_paralysis') }}
+WHERE df_complete::text = 'true'

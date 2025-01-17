@@ -72,3 +72,4 @@ SELECT
     premise_phone_number::text AS premise_phone_number,
     premise_email_address::text AS premise_email_address
 FROM {{ ref('stg_food_drugs_and_chemicals_sampling_form') }}
+WHERE df_complete::text = 'true'

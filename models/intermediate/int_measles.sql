@@ -110,3 +110,4 @@ SELECT
     status_of_patient::text AS status_of_patient,
     date_of_discharge::text AS date_of_discharge
 FROM {{ ref('stg_measles') }}
+WHERE df_complete::text = 'true'

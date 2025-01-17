@@ -65,3 +65,4 @@ SELECT
     title_population::text AS title_population,
     population_of_household_under_five_years::text AS population_of_household_under_five_years
 FROM {{ ref('stg_rapid_wash_assessment_tool') }}
+WHERE df_complete::text = 'true'

@@ -108,3 +108,4 @@ SELECT
     case_defs_community_in_use::text AS case_defs_community_in_use,
     case_defs_hiv_included::text AS case_defs_hiv_included
 FROM {{ ref('stg_mpox_preparedness') }}
+WHERE df_complete::text = 'true'

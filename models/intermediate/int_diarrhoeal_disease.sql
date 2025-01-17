@@ -153,3 +153,4 @@ SELECT
     date_of_culture_result::text AS date_of_culture_result,
     culture_result_diarrhoeal::text AS culture_result_diarrhoeal
 FROM {{ ref('stg_diarrhoeal_disease') }}
+WHERE df_complete::text = 'true'

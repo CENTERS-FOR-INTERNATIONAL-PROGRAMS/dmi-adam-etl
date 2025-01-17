@@ -59,3 +59,4 @@ SELECT
     landmark::text AS landmark,
     sample_collection_pickup_site::text AS sample_collection_pickup_site
 FROM {{ ref('stg_water_sampling') }}
+WHERE df_complete::text = 'true'

@@ -31,3 +31,4 @@ SELECT
     date_of_detection::text AS date_of_detection,
     date_of_notification::text AS date_of_notification
 FROM {{ ref('stg_outbreak_events') }}
+WHERE df_complete::text = 'true'
