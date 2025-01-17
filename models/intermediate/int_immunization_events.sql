@@ -28,3 +28,4 @@ SELECT
     date_of_event_end::text AS date_of_event_end,
     description_of_event::text AS description_of_event
 FROM {{ ref('stg_immunization_events') }}
+WHERE df_complete::text = 'true'

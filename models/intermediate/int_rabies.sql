@@ -109,3 +109,4 @@ SELECT
     discharge_date::text AS discharge_date,
     patient_status::text AS patient_status
 FROM {{ ref('stg_rabies') }}
+WHERE df_complete::text = 'true'

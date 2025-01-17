@@ -34,3 +34,4 @@ SELECT
     date_of_follow_up::text AS date_of_follow_up,
     contact_is_symptomatic::text AS contact_is_symptomatic
 FROM {{ ref('stg_mpox_traveler') }}
+WHERE df_complete::text = 'true'

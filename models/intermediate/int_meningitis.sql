@@ -130,3 +130,4 @@ SELECT
     title_clinical_care::text AS title_clinical_care,
     type_of_care::text AS type_of_care
 FROM {{ ref('stg_meningitis') }}
+WHERE df_complete::text = 'true'

@@ -119,3 +119,4 @@ SELECT
     rcce_pre_post_outbreak_assessment::text AS rcce_pre_post_outbreak_assessment,
     rcce_national_plan_in_place::text AS rcce_national_plan_in_place
 FROM {{ ref('stg_mvd_preparedness') }}
+WHERE df_complete::text = 'true'

@@ -187,3 +187,4 @@ SELECT
     contact_follow_up_date_of_follow_up::text AS contact_follow_up_date_of_follow_up,
     contact_follow_up_contact_is_symptomatic::text AS contact_follow_up_contact_is_symptomatic
 FROM {{ ref('stg_viral_hemorrhagic_fever') }}
+WHERE df_complete::text = 'true'

@@ -105,3 +105,4 @@ SELECT
     name_of_laboratory_facility::text AS name_of_laboratory_facility,
     mfl_number_of_laboratory_facility::text AS mfl_number_of_laboratory_facility
 FROM {{ ref('stg_neonatal_tetanus') }}
+WHERE df_complete::text = 'true'

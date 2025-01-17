@@ -183,3 +183,4 @@ SELECT
     route_of_admission_other::text AS route_of_admission_other,
     reason_for_vaccination::text AS reason_for_vaccination
 FROM {{ ref('stg_mpox') }}
+WHERE df_complete::text = 'true'
