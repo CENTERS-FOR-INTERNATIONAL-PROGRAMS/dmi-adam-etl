@@ -31,6 +31,17 @@ clean-targets:         # directories to be removed by `dbt clean`
 # files using the `{{ config(...) }}` macro.
 models:
   dmi_adam_etl:
+    pre-hook: |
+      drop view if exists view_dataset_acute_flaccid_paralysis;
+      drop view if exists view_dataset_community_led_total_sanitation;
+      drop view if exists view_dataset_diarrhoeal_disease;
+      drop view if exists view_dataset_measles;
+      drop view if exists view_dataset_meningitis;
+      drop view if exists view_dataset_neonatal_tetanus;
+      drop view if exists view_dataset_rabies;
+      drop view if exists view_dataset_respiratory_syndrome;
+      drop view if exists view_dataset_sampling_form_for_fortified_foods;
+      drop view if exists view_dataset_viral_hemorrhagic_fever;
     data_mart:
       +materialized: table
     intermediate:
