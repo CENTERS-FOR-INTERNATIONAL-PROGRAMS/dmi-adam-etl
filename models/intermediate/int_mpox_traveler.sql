@@ -19,11 +19,22 @@ SELECT
     location_latitude::text AS location_latitude,
     location_longitude::text AS location_longitude,
     ''::text AS syndrome,
-    'Mpox'::text AS disease,
+    'Mpox Traveller'::text AS disease,
     CASE WHEN date_of_follow_up ~ '^\d{2}/\d{2}/\d{4}$' THEN to_timestamp(date_of_follow_up, 'DD/MM/YYYY')::date ELSE NULL END AS case_date,
     CASE WHEN date_of_follow_up ~ '^\d{2}/\d{2}/\d{4}$' THEN to_char(to_timestamp(date_of_follow_up, 'DD/MM/YYYY'), 'YYYY "W"IW') ELSE NULL END AS epi_week,
     name_of_traveler::text AS name,
-    age_years::text AS age_years,
+     CASE 
+        WHEN age_years ~ '^[0-9]+(\.[0-9]+)?$' THEN age_years::float
+        ELSE NULL
+    END AS age_years,
+    CASE
+        WHEN NOT (age_years ~ '^[0-9]+(\.[0-9]+)?$') THEN 'Unknown'
+        WHEN age_years::float < 2 THEN '0-2 yrs'
+        WHEN age_years::float BETWEEN 2 AND 5 THEN '2-5 yrs'
+        WHEN age_years::float BETWEEN 5 AND 16 THEN '5-16 yrs'
+        WHEN age_years::float > 16 THEN '16+ yrs'
+        ELSE 'Unknown'
+    END AS age_group,
     sex_of_traveler::text AS sex,
     nationality_of_traveler::text AS nationality,
     id_number::text AS id_number,

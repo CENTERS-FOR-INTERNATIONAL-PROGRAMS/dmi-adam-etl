@@ -19,7 +19,7 @@ SELECT
     location_latitude::text AS location_latitude,
     location_longitude::text AS location_longitude,
     ''::text AS syndrome,
-    'Mpox'::text AS disease,
+    'Mpox Preparedness'::text AS disease,
     county::text AS county,
     date_of_entry::text AS date_of_entry,
     CASE WHEN date_of_entry ~ '^\d{2}/\d{2}/\d{4}$' THEN to_timestamp(date_of_entry, 'DD/MM/YYYY')::date ELSE NULL END AS case_date,

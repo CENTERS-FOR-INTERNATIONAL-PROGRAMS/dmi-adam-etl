@@ -19,7 +19,7 @@ SELECT
     location_latitude::text AS location_latitude,
     location_longitude::text AS location_longitude,
     syndrome::text AS syndrome,
-    disease::text AS disease,
+    'Monkey Pox' AS disease,
     CASE WHEN date_of_onset ~ '^\d{2}/\d{2}/\d{4}$' THEN to_timestamp(date_of_onset, 'DD/MM/YYYY')::date ELSE NULL END AS case_date,
     CASE WHEN date_of_onset ~ '^\d{2}/\d{2}/\d{4}$' THEN to_char(to_timestamp(date_of_onset, 'DD/MM/YYYY'), 'YYYY "W"IW') ELSE NULL END AS epi_week,
     epid::text AS epid,
