@@ -80,7 +80,7 @@ SELECT
     respondent_address::text AS respondent_address,
     contact_surname::text AS contact_surname,
     contact_given_name::text AS contact_given_name,
-    contact_gender::text AS contact_gender,
+    contact_gender::text AS contact_sex,
     contact_age::text AS contact_age,
     outcome_final_case_classification::text AS outcome_final_case_classification,
     outcome_final_patient_status::text AS outcome_final_patient_status,
