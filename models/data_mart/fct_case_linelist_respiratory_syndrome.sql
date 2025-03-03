@@ -1,16 +1,26 @@
 {{ config(
     materialized = 'table',
     indexes=[
+      {'columns': ['syndrome']},
+      {'columns': ['disease']},
       {'columns': ['id']},
       {'columns': ['parent_id']},
       {'columns': ['event_id']},
-      {'columns': ['completed']},
       {'columns': ['case_date']},
       {'columns': ['epi_week']},
       {'columns': ['type_of_case']},
       {'columns': ['country']},
       {'columns': ['county']},
       {'columns': ['subcounty']},
+      {'columns': ['suspected']},
+      {'columns': ['tested']},
+      {'columns': ['confirmed']},
+      {'columns': ['admitted']},
+      {'columns': ['discharged']},
+      {'columns': ['died']},
+      {'columns': ['probable']},
+      {'columns': ['contact']},
+      {'columns': ['completed']},
     ]
 )}}
 
@@ -42,7 +52,7 @@ SELECT
     date_of_investigation,
     location_of_investigation,
     location_of_investigation_other,
-    type_of_case,
+    CASE WHEN type_of_case IS NOT NULL THEN type_of_case ELSE 'Unknown' END AS type_of_case,
     given_name,
     family_name,
     sex,
@@ -114,5 +124,14 @@ SELECT
     date_of_laboratory_testing_results,
     result_of_laboratory_test,
     laboratory_facility_name,
-    laboratory_facility_name_other
+    laboratory_facility_name_other,
+    (1)::integer AS suspected,
+    (CASE WHEN were_laboratory_samples_collected = 'Yes' THEN 1 ELSE 0 END)::integer AS tested,
+    (CASE WHEN result_of_laboratory_test = 'Positive' THEN 1 WHEN type_of_case = 'Confirmed' THEN 1 ELSE 0 END)::integer AS confirmed,
+    (CASE WHEN date_of_admission IS NOT NULL THEN 1 ELSE 0 END)::integer AS admitted,
+    (CASE WHEN date_of_discharge IS NOT NULL THEN 1 ELSE 0 END)::integer AS discharged,
+    (CASE WHEN date_of_death IS NOT NULL THEN 1 ELSE 0 END)::integer AS died,
+    (CASE WHEN type_of_case = 'Probable' THEN 1 ELSE 0 END)::integer AS probable,
+    (CASE WHEN type_of_case = 'Contact' THEN 1 ELSE 0 END)::integer AS contact,
+    current_date AS load_date
 FROM {{ ref('int_respiratory_syndrome') }}

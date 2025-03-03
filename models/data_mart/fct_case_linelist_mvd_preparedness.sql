@@ -1,13 +1,25 @@
 {{ config(
     materialized = 'table',
     indexes=[
+      {'columns': ['syndrome']},
+      {'columns': ['disease']},
       {'columns': ['id']},
       {'columns': ['parent_id']},
       {'columns': ['event_id']},
-      {'columns': ['completed']},
       {'columns': ['case_date']},
       {'columns': ['epi_week']},
+      {'columns': ['country']},
       {'columns': ['county']},
+      {'columns': ['subcounty']},
+      {'columns': ['suspected']},
+      {'columns': ['tested']},
+      {'columns': ['confirmed']},
+      {'columns': ['admitted']},
+      {'columns': ['discharged']},
+      {'columns': ['died']},
+      {'columns': ['probable']},
+      {'columns': ['contact']},
+      {'columns': ['completed']},
     ]
 )}}
 
@@ -33,10 +45,15 @@ SELECT
     location_longitude,
     syndrome,
     disease,
+    '' AS country,
     county,
+    '' AS subcounty,
     date_of_assessment,
     case_date,
     epi_week,
+    'Unknown' AS type_of_case,
+    'Unknown' AS sex,
+    'Unknown' AS age_group,
     name_of_the_validator,
     validator_phone_number,
     ipc_staff_trained_vhf_cases,
@@ -130,5 +147,14 @@ SELECT
     rcce_existing_chws_in_high_risk,
     rcce_communication_platforms_social,
     rcce_pre_post_outbreak_assessment,
-    rcce_national_plan_in_place
+    rcce_national_plan_in_place,
+    (0)::integer AS suspected,
+    (0)::integer AS tested,
+    (0)::integer AS confirmed,
+    (0)::integer AS admitted,
+    (0)::integer AS discharged,
+    (0)::integer AS died,
+    (0)::integer AS probable,
+    (0)::integer AS contact,
+    current_date AS load_date
 FROM {{ ref('int_mvd_preparedness') }}

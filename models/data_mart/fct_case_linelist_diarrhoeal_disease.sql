@@ -1,16 +1,26 @@
 {{ config(
     materialized = 'table',
     indexes=[
+      {'columns': ['syndrome']},
+      {'columns': ['disease']},
       {'columns': ['id']},
       {'columns': ['parent_id']},
       {'columns': ['event_id']},
-      {'columns': ['completed']},
       {'columns': ['case_date']},
       {'columns': ['epi_week']},
       {'columns': ['type_of_case']},
       {'columns': ['country']},
       {'columns': ['county']},
       {'columns': ['subcounty']},
+      {'columns': ['suspected']},
+      {'columns': ['tested']},
+      {'columns': ['confirmed']},
+      {'columns': ['admitted']},
+      {'columns': ['discharged']},
+      {'columns': ['died']},
+      {'columns': ['probable']},
+      {'columns': ['contact']},
+      {'columns': ['completed']},
     ]
 )}}
 
@@ -42,7 +52,7 @@ SELECT
     date_of_investigation,
     location_of_investigation,
     location_of_investigation_other,
-    type_of_case,
+    CASE WHEN type_of_case IS NOT NULL THEN type_of_case ELSE 'Unknown' END AS type_of_case,
     given_name,
     family_name,
     sex,
@@ -151,5 +161,14 @@ SELECT
     title_laboratory_facility,
     title_results,
     date_of_culture_result,
-    culture_result_diarrhoeal
+    culture_result_diarrhoeal,
+    (1)::integer AS suspected,
+    (CASE WHEN rdt_done = 'Yes' THEN 1 ELSE 0 END)::integer AS tested,
+    (CASE WHEN rdt_results = 'Positive' THEN 1 WHEN type_of_case = 'Confirmed' THEN 1 ELSE 0 END)::integer AS confirmed,
+    (CASE WHEN status_of_patient = 'Admitted' THEN 1 ELSE 0 END)::integer AS admitted,
+    (CASE WHEN status_of_patient = 'Discharged' THEN 1 ELSE 0 END)::integer AS discharged,
+    (CASE WHEN outcome_of_patient = 'Dead' THEN 1 ELSE 0 END)::integer AS died,
+    (CASE WHEN type_of_case = 'Probable' THEN 1 ELSE 0 END)::integer AS probable,
+    (CASE WHEN type_of_case = 'Contact' THEN 1 ELSE 0 END)::integer AS contact,
+    current_date AS load_date
 FROM {{ ref('int_diarrhoeal_disease') }}
