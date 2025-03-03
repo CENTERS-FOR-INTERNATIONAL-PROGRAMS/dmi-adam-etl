@@ -120,7 +120,7 @@ SELECT
     patient_status,
     (1)::integer AS suspected,
     (CASE WHEN exposure_type_rabies IS NOT NULL THEN 1 ELSE 0 END)::integer AS tested,
-    (CASE WHEN exposure_type_rabies IS NOT NULL THEN 1 WHEN type_of_case = 'Confirmed' THEN 1 ELSE 0 END)::integer AS confirmed,
+    (CASE WHEN type_of_case = 'Confirmed' THEN 1 ELSE 0 END)::integer AS confirmed,
     (CASE WHEN admitted = 'Yes' THEN 1 ELSE 0 END)::integer AS admitted,
     (CASE WHEN patient_status = 'Discharged' THEN 1 ELSE 0 END)::integer AS discharged,
     (CASE WHEN patient_status = 'Dead' THEN 1 ELSE 0 END)::integer AS died,

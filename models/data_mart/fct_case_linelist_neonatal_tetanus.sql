@@ -116,7 +116,7 @@ SELECT
     mfl_number_of_laboratory_facility,
     (1)::integer AS suspected,
     (CASE WHEN laboratory_samples_were_collected = 'Yes' THEN 1 ELSE 0 END)::integer AS tested,
-    (CASE WHEN confirmed_nnt = 'Yes' THEN 1 WHEN type_of_case = 'Confirmed' THEN 1 ELSE 0 END)::integer AS confirmed,
+    (CASE WHEN confirmed_nnt = 'Yes' THEN 1 WHEN type_of_case = 'Confirmed' THEN 1 WHEN result_of_laboratory_test = 'Positive' THEN 1, ELSE 0 END)::integer AS confirmed,
     (CASE WHEN status_of_patient = 'Admitted' THEN 1 ELSE 0 END)::integer AS admitted,
     (CASE WHEN status_of_patient = 'Discharged' THEN 1 ELSE 0 END)::integer AS discharged,
     (CASE WHEN outcome_of_patient = 'Dead' THEN 1 ELSE 0 END)::integer AS died,
