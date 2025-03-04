@@ -119,7 +119,7 @@ SELECT
     date_of_death,
     status_of_patient,
     date_of_discharge,
-    CASE WHEN type_of_case <> 'Contact' THEN 1 ELSE 0 END)::integer AS suspected,
+    (CASE WHEN type_of_case <> 'Contact' THEN 1 ELSE 0 END)::integer AS suspected,
     (CASE WHEN were_samples_collected = 'Yes' THEN 1 ELSE 0 END)::integer AS tested,
     (CASE WHEN laboratory_results = 'Positive' THEN 1 WHEN type_of_case = 'Confirmed' THEN 1 ELSE 0 END)::integer AS confirmed,
     (CASE WHEN outcome = 'Admitted' THEN 1 WHEN status_of_patient = 'Admitted' THEN 1 ELSE 0 END)::integer AS admitted,
