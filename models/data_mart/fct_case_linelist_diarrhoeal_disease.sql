@@ -162,7 +162,7 @@ SELECT
     title_results,
     date_of_culture_result,
     culture_result_diarrhoeal,
-    CASE WHEN type_of_case <> 'Contact' THEN 1 ELSE 0 END)::integer AS suspected,
+    (CASE WHEN type_of_case <> 'Contact' THEN 1 ELSE 0 END)::integer AS suspected,
     (CASE WHEN culture_done = 'Yes' THEN 1 WHEN rdt_done = 'Yes' THEN 1 ELSE 0 END)::integer AS tested,
     (CASE WHEN culture_result_diarrhoeal = 'Positive' THEN 1 WHEN rdt_results = 'Positive' THEN 1 WHEN type_of_case = 'Confirmed' THEN 1 ELSE 0 END)::integer AS confirmed,
     (CASE WHEN status_of_patient = 'Admitted' THEN 1 ELSE 0 END)::integer AS admitted,

@@ -196,7 +196,7 @@ SELECT
     contact_follow_up_day_of_follow_up,
     contact_follow_up_date_of_follow_up,
     contact_follow_up_contact_is_symptomatic,
-    CASE WHEN type_of_case <> 'Contact' THEN 1 ELSE 0 END)::integer AS suspected,
+    (CASE WHEN type_of_case <> 'Contact' THEN 1 ELSE 0 END)::integer AS suspected,
     (CASE WHEN rdt_done = 'Yes' THEN 1 WHEN laboratory_sample_collected = 'Yes' THEN 1 WHEN laboratory_tests IS NOT NULL THEN 1 ELSE 0 END)::integer AS tested,
     (CASE WHEN rdt_results = 'Positive' THEN 1 WHEN outcome_final_case_classification = 'Confirmed' THEN 1 WHEN type_of_case = 'Confirmed' THEN 1 ELSE 0 END)::integer AS confirmed,
     (CASE WHEN admitted = 'Yes' THEN 1 WHEN outcome = 'Admitted' THEN 1 WHEN admission_date IS NOT NULL THEN 1 ELSE 0 END)::integer AS admitted,

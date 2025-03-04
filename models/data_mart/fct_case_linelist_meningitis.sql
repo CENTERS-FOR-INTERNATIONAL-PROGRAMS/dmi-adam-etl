@@ -139,7 +139,7 @@ SELECT
     outpatient_number,
     title_clinical_care,
     type_of_care,
-    CASE WHEN type_of_case <> 'Contact' THEN 1 ELSE 0 END)::integer AS suspected,
+    (CASE WHEN type_of_case <> 'Contact' THEN 1 ELSE 0 END)::integer AS suspected,
     (CASE WHEN laboratory_test_requested IS NOT NULL THEN 1 WHEN laboratory_tests IS NOT NULL THEN 1 WHEN laboratory_tests_other IS NOT NULL THEN 1 ELSE 0 END)::integer AS tested,
     (CASE WHEN patient_status IN ('Admitted', 'Discharged', 'Dead') THEN 1 WHEN type_of_case = 'Confirmed' THEN 1 ELSE 0 END)::integer AS confirmed,
     (CASE WHEN patient_status = 'Admitted' THEN 1 ELSE 0 END)::integer AS admitted,
