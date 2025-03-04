@@ -1,16 +1,26 @@
 {{ config(
     materialized = 'table',
     indexes=[
+      {'columns': ['syndrome']},
+      {'columns': ['disease']},
       {'columns': ['id']},
       {'columns': ['parent_id']},
       {'columns': ['event_id']},
-      {'columns': ['completed']},
       {'columns': ['case_date']},
       {'columns': ['epi_week']},
       {'columns': ['type_of_case']},
       {'columns': ['country']},
       {'columns': ['county']},
       {'columns': ['subcounty']},
+      {'columns': ['suspected']},
+      {'columns': ['tested']},
+      {'columns': ['confirmed']},
+      {'columns': ['admitted']},
+      {'columns': ['discharged']},
+      {'columns': ['died']},
+      {'columns': ['probable']},
+      {'columns': ['contact']},
+      {'columns': ['completed']},
     ]
 )}}
 
@@ -35,12 +45,12 @@ SELECT
     location_latitude,
     location_longitude,
     syndrome,
-    disease,
+    'Marburg' AS disease,
     case_date,
     epi_week,
     epid,
     date_of_investigation,
-    type_of_case,
+    CASE WHEN type_of_case IS NOT NULL THEN type_of_case ELSE 'Unknown' END AS type_of_case,
     name,
     sex,
     age_years,
@@ -95,5 +105,14 @@ SELECT
     local_phone_number_used_while_in_kenya,
     country,
     county,
-    subcounty
+    subcounty,
+    (1)::integer AS suspected,
+    null::integer AS tested,
+    null::integer AS confirmed,
+    null::integer AS admitted,
+    null::integer AS discharged,
+    null::integer AS died,
+    (CASE WHEN type_of_case = 'Probable' THEN 1 ELSE 0 END)::integer AS probable,
+    (CASE WHEN type_of_case = 'Contact' THEN 1 ELSE 0 END)::integer AS contact,
+    current_date AS load_date
 FROM {{ ref('int_marburg_traveler') }}

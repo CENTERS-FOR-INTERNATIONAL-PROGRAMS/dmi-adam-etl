@@ -1,14 +1,26 @@
 {{ config(
     materialized = 'table',
     indexes=[
+      {'columns': ['syndrome']},
+      {'columns': ['disease']},
       {'columns': ['id']},
       {'columns': ['parent_id']},
       {'columns': ['event_id']},
-      {'columns': ['completed']},
       {'columns': ['case_date']},
       {'columns': ['epi_week']},
+      {'columns': ['type_of_case']},
+      {'columns': ['country']},
       {'columns': ['county']},
       {'columns': ['subcounty']},
+      {'columns': ['suspected']},
+      {'columns': ['tested']},
+      {'columns': ['confirmed']},
+      {'columns': ['admitted']},
+      {'columns': ['discharged']},
+      {'columns': ['died']},
+      {'columns': ['probable']},
+      {'columns': ['contact']},
+      {'columns': ['completed']},
     ]
 )}}
 
@@ -36,6 +48,10 @@ SELECT
     disease,
     case_date,
     epi_week,
+    'Unknown'::text AS type_of_case,
+    null::text AS sex,
+    null::text AS age_group,
+    null::text AS country,
     sources_of_water,
     sources_of_water_other,
     water_source_is_protected,
@@ -77,5 +93,14 @@ SELECT
     phone_number_of_head_of_household,
     email_of_head_of_household,
     title_population,
-    population_of_household_under_five_years
+    population_of_household_under_five_years,
+    (1)::integer AS suspected,
+    (0)::integer AS tested,
+    (0)::integer AS confirmed,
+    (0)::integer AS admitted,
+    (0)::integer AS discharged,
+    (0)::integer AS died,
+    (0)::integer AS probable,
+    (0)::integer AS contact,
+    current_date AS load_date
 FROM {{ ref('int_rapid_wash_assessment_tool') }}

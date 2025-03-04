@@ -1,15 +1,31 @@
 {{ config(
     materialized = 'table',
     indexes=[
+      {'columns': ['syndrome']},
+      {'columns': ['disease']},
       {'columns': ['case_date']},
       {'columns': ['epi_week']},
+      {'columns': ['type_of_case']},
+      {'columns': ['country']},
+      {'columns': ['county']},
       {'columns': ['subcounty']},
+      {'columns': ['suspected']},
+      {'columns': ['tested']},
+      {'columns': ['confirmed']},
+      {'columns': ['admitted']},
+      {'columns': ['discharged']},
+      {'columns': ['died']},
+      {'columns': ['probable']},
+      {'columns': ['contact']},
+      {'columns': ['completed']},
     ]
 )}}
 
 SELECT
     mform_id,
     form_id,
+    null::text AS syndrome,
+    'Community Led Total Sanitation' AS disease,
     case_unique_id,
     case_date,
     epi_week,
@@ -20,6 +36,11 @@ SELECT
     location_accuracy,
     location_latitude,
     location_longitude,
+    'Unknown'::text AS type_of_case,
+    null::text AS sex,
+    null::text AS age_group,
+    null::text AS country,
+    null::text AS county,
     village,
     sublocation,
     commuity_unit,
@@ -46,5 +67,15 @@ SELECT
     title_clts_follow_up,
     clts_commitment_new_latrine_constructed,
     ctls_follow_up_handwashing_facility_constructed,
-    clts_followup_latrine_construction_date
+    clts_followup_latrine_construction_date,
+    (1)::integer AS suspected,
+    (0)::integer AS tested,
+    (0)::integer AS confirmed,
+    (0)::integer AS admitted,
+    (0)::integer AS discharged,
+    (0)::integer AS died,
+    (0)::integer AS probable,
+    (0)::integer AS contact,
+    current_date AS load_date,
+    ''::text AS completed
 FROM {{ ref('int_community_led_total_sanitation') }}

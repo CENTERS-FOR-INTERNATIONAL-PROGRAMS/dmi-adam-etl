@@ -36,7 +36,7 @@ jobs:
           
       - name: Run dbt models
         run: |
-          dbt run --profiles-dir ./profiles/ --target prod
+          dbt run --profiles-dir ./profiles/ --target prod --full-refresh
 
       - name: Run dbt tests
         run: |
