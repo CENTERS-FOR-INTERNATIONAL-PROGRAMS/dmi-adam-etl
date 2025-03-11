@@ -44,7 +44,7 @@ SELECT
     location_accuracy,
     location_latitude,
     location_longitude,
-    syndrome,
+    'Respiratory Syndrome'::text AS syndrome,
     disease,
     case_date,
     epi_week,

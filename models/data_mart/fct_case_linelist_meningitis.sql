@@ -45,7 +45,7 @@ SELECT
     location_latitude,
     location_longitude,
     syndrome,
-    disease,
+    'Meningitis' AS disease,
     case_date,
     epi_week,
     epid,
