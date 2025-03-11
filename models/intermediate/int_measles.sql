@@ -21,7 +21,7 @@ SELECT
     syndrome::text AS syndrome,
     disease::text AS disease,
     CASE WHEN date_of_onset_rash ~ '^\d{2}/\d{2}/\d{4}$' THEN to_timestamp(date_of_onset_rash, 'DD/MM/YYYY')::date ELSE NULL END AS case_date,
-    CASE WHEN date_of_onset_rash ~ '^\d{2}/\d{2}/\d{4}$' THEN to_char(to_timestamp(date_of_onset_rash, 'DD/MM/YYYY'), 'YYYY "W"IW') ELSE NULL END AS epi_week,
+    CASE WHEN date_of_onset_rash ~ '^\d{2}/\d{2}/\d{4}$' THEN to_char(to_timestamp(date_of_onset_rash, 'DD/MM/YYYY'), 'YYYY"-"IW') ELSE NULL END AS epi_week,
     epid::text AS epid,
     date_of_investigation::text AS date_of_investigation,
     type_of_case::text AS type_of_case,

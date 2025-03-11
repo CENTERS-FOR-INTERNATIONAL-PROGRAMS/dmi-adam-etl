@@ -23,7 +23,7 @@ SELECT
     county::text AS county,
     date_of_entry::text AS date_of_entry,
     CASE WHEN date_of_entry ~ '^\d{2}/\d{2}/\d{4}$' THEN to_timestamp(date_of_entry, 'DD/MM/YYYY')::date ELSE NULL END AS case_date,
-    CASE WHEN date_of_entry ~ '^\d{2}/\d{2}/\d{4}$' THEN to_char(to_timestamp(date_of_entry, 'DD/MM/YYYY'), 'YYYY "W"IW') ELSE NULL END AS epi_week,
+    CASE WHEN date_of_entry ~ '^\d{2}/\d{2}/\d{4}$' THEN to_char(to_timestamp(date_of_entry, 'DD/MM/YYYY'), 'YYYY"-"IW') ELSE NULL END AS epi_week,
     is_there_a_confirmed_case_of_mpox::text AS is_there_a_confirmed_case_of_mpox,
     ipc_committee_established::text AS ipc_committee_established,
     ipc_committee_disseminated_guidelines::text AS ipc_committee_disseminated_guidelines,

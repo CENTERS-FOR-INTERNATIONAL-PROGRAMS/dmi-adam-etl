@@ -18,7 +18,7 @@ SELECT
     date_part('day', date) AS day,
     date_part('quarter', date) AS quarter,
     date_part('week', date) AS week,
-    to_char(date, 'YYYY "W"IW') AS epi_week,
+    to_char(date, 'YYYY"-"IW') AS epi_week,
     current_date AS load_date
 FROM
     {{ ref('int_date_range') }}

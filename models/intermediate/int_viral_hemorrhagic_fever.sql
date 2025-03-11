@@ -21,7 +21,7 @@ SELECT
     syndrome::text AS syndrome,
     disease::text AS disease,
     CASE WHEN symptoms_start_date ~ '^\d{2}/\d{2}/\d{4}$' THEN to_timestamp(symptoms_start_date, 'DD/MM/YYYY')::date ELSE NULL END AS case_date,
-    CASE WHEN symptoms_start_date ~ '^\d{2}/\d{2}/\d{4}$' THEN to_char(to_timestamp(symptoms_start_date, 'DD/MM/YYYY'), 'YYYY "W"IW') ELSE NULL END AS epi_week,
+    CASE WHEN symptoms_start_date ~ '^\d{2}/\d{2}/\d{4}$' THEN to_char(to_timestamp(symptoms_start_date, 'DD/MM/YYYY'), 'YYYY"-"IW') ELSE NULL END AS epi_week,
     epid::text AS epid,
     date_of_investigation::text AS date_of_investigation,
     location_of_investigation::text AS location_of_investigation,

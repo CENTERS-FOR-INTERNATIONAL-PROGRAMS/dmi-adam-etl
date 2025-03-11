@@ -19,7 +19,7 @@ SELECT
     location_latitude::text AS location_latitude,
     location_longitude::text AS location_longitude,
     CASE WHEN date_of_sample_collection ~ '^\d{2}/\d{2}/\d{4}$' THEN to_timestamp(date_of_sample_collection, 'DD/MM/YYYY')::date ELSE NULL END AS case_date,
-    CASE WHEN date_of_sample_collection ~ '^\d{2}/\d{2}/\d{4}$' THEN to_char(to_timestamp(date_of_sample_collection, 'DD/MM/YYYY'), 'YYYY "W"IW') ELSE NULL END AS epi_week,
+    CASE WHEN date_of_sample_collection ~ '^\d{2}/\d{2}/\d{4}$' THEN to_char(to_timestamp(date_of_sample_collection, 'DD/MM/YYYY'), 'YYYY"-"IW') ELSE NULL END AS epi_week,
     ''::text AS syndrome,
     'Water Sampling'::text AS disease,
     sample_number::text AS sample_number,

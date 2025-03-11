@@ -21,7 +21,7 @@ SELECT
     ''::text AS syndrome,
     'Wash'::text AS disease,
     CASE WHEN substring(created_timestamp from 1 for 10) ~ '^\d{2}/\d{2}/\d{4}$' THEN to_timestamp(substring(created_timestamp from 1 for 10), 'DD/MM/YYYY')::date ELSE NULL END AS case_date,
-    CASE WHEN substring(created_timestamp from 1 for 10) ~ '^\d{2}/\d{2}/\d{4}$' THEN to_char(to_timestamp(substring(created_timestamp from 1 for 10), 'DD/MM/YYYY'), 'YYYY "W"IW') ELSE NULL END AS epi_week,
+    CASE WHEN substring(created_timestamp from 1 for 10) ~ '^\d{2}/\d{2}/\d{4}$' THEN to_char(to_timestamp(substring(created_timestamp from 1 for 10), 'DD/MM/YYYY'), 'YYYY"-"IW') ELSE NULL END AS epi_week,
     sources_of_water::text AS sources_of_water,
     sources_of_water_other::text AS sources_of_water_other,
     water_source_is_protected::text AS water_source_is_protected,

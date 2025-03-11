@@ -21,7 +21,7 @@ SELECT
     ''::text AS syndrome,
     'Mpox Traveller'::text AS disease,
     CASE WHEN date_of_follow_up ~ '^\d{2}/\d{2}/\d{4}$' THEN to_timestamp(date_of_follow_up, 'DD/MM/YYYY')::date ELSE NULL END AS case_date,
-    CASE WHEN date_of_follow_up ~ '^\d{2}/\d{2}/\d{4}$' THEN to_char(to_timestamp(date_of_follow_up, 'DD/MM/YYYY'), 'YYYY "W"IW') ELSE NULL END AS epi_week,
+    CASE WHEN date_of_follow_up ~ '^\d{2}/\d{2}/\d{4}$' THEN to_char(to_timestamp(date_of_follow_up, 'DD/MM/YYYY'), 'YYYY"-"IW') ELSE NULL END AS epi_week,
     name_of_traveler::text AS name,
      CASE 
         WHEN age_years ~ '^[0-9]+(\.[0-9]+)?$' THEN age_years::float

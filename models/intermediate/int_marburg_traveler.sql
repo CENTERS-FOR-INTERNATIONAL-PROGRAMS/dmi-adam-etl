@@ -21,7 +21,7 @@ SELECT
     ''::text AS syndrome,
     'Marburg'::text AS disease,
     CASE WHEN traveller_date_of_checking ~ '^\d{2}/\d{2}/\d{4}$' THEN to_timestamp(traveller_date_of_checking, 'DD/MM/YYYY')::date ELSE NULL END AS case_date,
-    CASE WHEN traveller_date_of_checking ~ '^\d{2}/\d{2}/\d{4}$' THEN to_char(to_timestamp(traveller_date_of_checking, 'DD/MM/YYYY'), 'YYYY "W"IW') ELSE NULL END AS epi_week,
+    CASE WHEN traveller_date_of_checking ~ '^\d{2}/\d{2}/\d{4}$' THEN to_char(to_timestamp(traveller_date_of_checking, 'DD/MM/YYYY'), 'YYYY"-"IW') ELSE NULL END AS epi_week,
     null::text AS epid,
     traveller_date_of_checking::text AS date_of_investigation,
     classification_of_traveller::text AS type_of_case,
