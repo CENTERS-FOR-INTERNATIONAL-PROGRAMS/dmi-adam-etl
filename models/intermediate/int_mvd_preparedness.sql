@@ -23,7 +23,7 @@ SELECT
     county::text AS county,
     date_of_assessment::text AS date_of_assessment,
     CASE WHEN date_of_assessment ~ '^\d{2}/\d{2}/\d{4}$' THEN to_timestamp(date_of_assessment, 'DD/MM/YYYY')::date ELSE NULL END AS case_date,
-    CASE WHEN date_of_assessment ~ '^\d{2}/\d{2}/\d{4}$' THEN to_char(to_timestamp(date_of_assessment, 'DD/MM/YYYY'), 'YYYY "W"IW') ELSE NULL END AS epi_week,
+    CASE WHEN date_of_assessment ~ '^\d{2}/\d{2}/\d{4}$' THEN to_char(to_timestamp(date_of_assessment, 'DD/MM/YYYY'), 'YYYY"-"IW') ELSE NULL END AS epi_week,
     name_of_the_validator::text AS name_of_the_validator,
     validator_phone_number::text AS validator_phone_number,
     ipc_staff_trained_vhf_cases::text AS ipc_staff_trained_vhf_cases,
