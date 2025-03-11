@@ -627,7 +627,7 @@ SELECT
     h.location_latitude,
     h.location_longitude,
     h.syndrome,
-    h.disease,
+    'Monkey Pox'::text AS disease,
     h.case_date,
     h.epi_week,
     h.epid,

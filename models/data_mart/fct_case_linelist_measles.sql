@@ -45,7 +45,7 @@ SELECT
     location_latitude,
     location_longitude,
     syndrome,
-    disease,
+    'Measles' AS disease,
     case_date,
     epi_week,
     epid,

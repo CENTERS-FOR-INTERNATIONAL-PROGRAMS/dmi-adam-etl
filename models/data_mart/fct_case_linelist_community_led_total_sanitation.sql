@@ -24,8 +24,8 @@
 SELECT
     mform_id,
     form_id,
-    null::text AS syndrome,
-    'Community Led Total Sanitation' AS disease,
+    'Community Led Total Sanitation'::text AS syndrome,
+    'Community Led Total Sanitation'::text AS disease,
     case_unique_id,
     case_date,
     epi_week,
