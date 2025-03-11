@@ -27,7 +27,6 @@
 )}}
 
 WITH RECURSIVE hierarchy AS (
-    -- Base case: root node
     SELECT 
         m.id,
         m.parent_id,
@@ -197,7 +196,7 @@ WITH RECURSIVE hierarchy AS (
         m.route_of_admission,
         m.route_of_admission_other,
         m.reason_for_vaccination,
-        (CASE WHEN m.type_of_case <> 'Contact' THEN 1 ELSE 0 END)::integer AS suspected,
+        (1)::integer AS suspected,
         (CASE WHEN m.samples_were_collected = 'Yes' THEN 1 WHEN m.tests IS NOT NULL THEN 1 WHEN m.test_other IS NOT NULL THEN 1 ELSE 0 END)::integer AS tested,
         (CASE WHEN m.type_of_case = 'Confirmed' THEN 1 WHEN m.result_of_laboratory_test = 'Positive' THEN 1 ELSE 0 END)::integer AS confirmed,
         (CASE WHEN m.outcome_of_patient = 'Admitted' THEN 1 WHEN m.status_of_patient = 'Admitted' THEN 1 ELSE 0 END)::integer AS admitted,
@@ -211,7 +210,6 @@ WITH RECURSIVE hierarchy AS (
 
     UNION ALL
 
-    -- Recursive case: child nodes
     SELECT 
         c.id,
         c.parent_id,
@@ -381,7 +379,7 @@ WITH RECURSIVE hierarchy AS (
         c.route_of_admission,
         c.route_of_admission_other,
         c.reason_for_vaccination,
-        (CASE WHEN c.type_of_case <> 'Contact' THEN 1 ELSE 0 END)::integer AS suspected,
+        (1)::integer AS suspected,
         (CASE WHEN c.samples_were_collected = 'Yes' THEN 1 WHEN c.tests IS NOT NULL THEN 1 WHEN c.test_other IS NOT NULL THEN 1 ELSE 0 END)::integer AS tested,
         (CASE WHEN c.type_of_case = 'Confirmed' THEN 1 WHEN c.result_of_laboratory_test = 'Positive' THEN 1 ELSE 0 END)::integer AS confirmed,
         (CASE WHEN c.outcome_of_patient = 'Admitted' THEN 1 WHEN c.status_of_patient = 'Admitted' THEN 1 ELSE 0 END)::integer AS admitted,
@@ -392,39 +390,29 @@ WITH RECURSIVE hierarchy AS (
         current_date AS load_date
     FROM {{ ref('int_mpox') }} c
     INNER JOIN hierarchy h ON c.parent_id = h.id
-    WHERE h.hierarchy_level < 3  -- Limit to 3 levels
-),
-
--- Add row number to handle the root node insert
-numbered_hierarchy AS (
-    SELECT 
-        ROW_NUMBER() OVER (ORDER BY hierarchy_level, id) as rn,
-        h.*,
-        CASE 
-            WHEN EXISTS (
-                SELECT 1 
-                FROM {{ ref('int_mpox') }} child 
-                WHERE child.parent_id = h.id
-            ) THEN true
-            ELSE false
-        END as has_children
-    FROM hierarchy h
 )
 
--- Combine root record with hierarchy
 SELECT
     CASE 
-        WHEN rn = 1 THEN 'a52f1b40-89b1-22df-a632-9dcf84b7c051'
+        WHEN ROW_NUMBER() OVER (ORDER BY hierarchy_level, id) = 1 THEN 'a52f1b40-89b1-22df-a632-9dcf84b7c051'
         ELSE id 
     END AS id,
     CASE 
-        WHEN rn = 1 THEN ''
+        WHEN ROW_NUMBER() OVER (ORDER BY hierarchy_level, id) = 1 THEN ''
         WHEN parent_id = '' THEN 'a52f1b40-89b1-22df-a632-9dcf84b7c051'
+        WHEN parent_id IS NULL THEN 'a52f1b40-89b1-22df-a632-9dcf84b7c051'
         ELSE parent_id 
     END AS parent_id,
     hierarchy_level,
-    has_children,
-    'Mpox' AS contact_tree_label,
+    CASE 
+        WHEN EXISTS (
+            SELECT 1 
+            FROM {{ ref('int_mpox') }} child 
+            WHERE child.parent_id = hierarchy.id
+        ) THEN true
+        ELSE false
+    END as has_children,
+    contact_tree_label,
     mform_id,
     mform_event,
     event_id,
@@ -442,7 +430,7 @@ SELECT
     location_latitude,
     location_longitude,
     syndrome,
-    'Monkey Pox' AS disease,
+    disease,
     case_date,
     epi_week,
     epid,
@@ -598,5 +586,4 @@ SELECT
     probable,
     contact,
     load_date
-FROM numbered_hierarchy
-WHERE hierarchy_level <= 3  -- Ensure we only get 3 levels
+FROM hierarchy
