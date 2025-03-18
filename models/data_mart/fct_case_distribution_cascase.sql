@@ -27,7 +27,7 @@ WITH base_data AS (
         country,
         county,
         subcounty,
-        COUNT(*) AS suspected,
+        SUM(CASE WHEN suspected = 1 THEN 1 ELSE 0 END) AS suspected,
         SUM(CASE WHEN probable = 1 THEN 1 ELSE 0 END) AS probable,
         SUM(CASE WHEN tested = 1 THEN 1 ELSE 0 END) AS tested,
         SUM(CASE WHEN confirmed = 1 THEN 1 ELSE 0 END) AS confirmed,
