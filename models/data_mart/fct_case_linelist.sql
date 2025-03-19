@@ -19,12 +19,7 @@
       {'columns': ['probable']},
       {'columns': ['contact']},
       {'columns': ['completed']}
-    ],
-    partition_by={
-      'field': 'case_date',
-      'data_type': 'date',
-      'granularity': 'month'
-    }
+    ]
 )}}
 
 {% set table_refs = [
