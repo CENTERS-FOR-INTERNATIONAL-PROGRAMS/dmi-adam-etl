@@ -9,6 +9,7 @@
       {'columns': ['country']},
       {'columns': ['county']},
       {'columns': ['subcounty']},
+      {'columns': ['total']},
       {'columns': ['suspected']},
       {'columns': ['tested']},
       {'columns': ['confirmed']},
@@ -18,12 +19,7 @@
       {'columns': ['probable']},
       {'columns': ['contact']},
       {'columns': ['completed']}
-    ],
-    partition_by={
-      'field': 'case_date',
-      'data_type': 'date',
-      'granularity': 'month'
-    }
+    ]
 )}}
 
 {% set table_refs = [
@@ -56,6 +52,7 @@
     'country',
     'county',
     'subcounty',
+    'total',
     'suspected',
     'tested',
     'confirmed',
@@ -76,5 +73,6 @@
         {{ base_columns | join(',\n        ') }},
         '{{ table }}' AS source_table
     FROM {{ table }}
+    WHERE total > 0
     {% if not loop.last %}UNION ALL{% endif %}
 {% endfor %}

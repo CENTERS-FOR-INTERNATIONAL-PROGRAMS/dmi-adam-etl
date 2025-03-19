@@ -43,13 +43,16 @@ SELECT
         ELSE NULL
     END AS age_days,
     CASE
-        WHEN NOT (age_years ~ '^[0-9]+(\.[0-9]+)?$') THEN 'Unknown'
-        WHEN age_years::float < 2 THEN '0-2 yrs'
-        WHEN age_years::float BETWEEN 2 AND 5 THEN '2-5 yrs'
-        WHEN age_years::float BETWEEN 5 AND 16 THEN '5-16 yrs'
-        WHEN age_years::float > 16 THEN '16+ yrs'
-        ELSE 'Unknown'
-    END AS age_group,
+    WHEN NOT (age_years ~ '^[0-9]+(\.[0-9]+)?$') THEN 'Unknown'
+    WHEN age_years::float BETWEEN 0 AND 10 THEN '0-10 yrs'
+    WHEN age_years::float BETWEEN 11 AND 20 THEN '11-20 yrs'
+    WHEN age_years::float BETWEEN 21 AND 30 THEN '21-30 yrs'
+    WHEN age_years::float BETWEEN 31 AND 40 THEN '31-40 yrs'
+    WHEN age_years::float BETWEEN 41 AND 50 THEN '41-50 yrs'
+    WHEN age_years::float BETWEEN 51 AND 60 THEN '51-60 yrs'
+    WHEN age_years::float > 60 THEN '60+ yrs'
+    ELSE 'Unknown'
+END AS age_group,
     date_of_birth::text AS date_of_birth,
     case_is_pregnant::text AS pregnant,
     phone_number::text AS phone_number,

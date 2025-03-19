@@ -9,6 +9,7 @@
         {'columns': ['country']},
         {'columns': ['county']},
         {'columns': ['subcounty']},
+        {'columns': ['total']},
         {'columns': ['suspected']},
         {'columns': ['tested']},
         {'columns': ['confirmed']},
@@ -23,47 +24,34 @@ WITH case_linelist_by_date_acute_flaccid_paralysis AS (
         dim_date.case_date,
         dim_date.epi_week,
         syndrome,
-        CASE
-            WHEN linelist.disease IS NULL THEN 'AFP'
-            ELSE linelist.disease
-        END AS disease,
-        type_of_case,
-        country,
-        county,
-        subcounty,
-        CASE
-            WHEN linelist.case_date IS NOT NULL THEN 1
-            WHEN linelist.confirmed = 1 THEN 1
-            ELSE 0
-        END AS cases,
-        suspected,
-        tested,
-        confirmed,
-        admitted,
-        discharged,
-        died,
+        'AFP'::text AS disease,
+        linelist.type_of_case,
+        linelist.country,
+        linelist.county,
+        linelist.subcounty,
+        CASE WHEN linelist.case_date IS NOT NULL THEN 1 ELSE 0 END AS cases,
+        linelist.total,
+        linelist.suspected,
+        linelist.tested,
+        linelist.confirmed,
+        linelist.admitted,
+        linelist.discharged,
+        linelist.died,
         current_date AS load_date
     FROM {{ ref('dim_date') }} AS dim_date
-    LEFT JOIN {{ ref('fct_case_linelist') }} AS linelist ON dim_date.case_date = linelist.case_date AND linelist.disease = 'AFP'
-    WHERE linelist.confirmed = 1
+    LEFT JOIN {{ ref('fct_case_linelist_acute_flaccid_paralysis') }} AS linelist ON dim_date.case_date = linelist.case_date AND linelist.total = 1 AND linelist.confirmed = 1
 ), case_linelist_by_date_community_led_total_sanitation AS (
     SELECT
         dim_date.case_date,
         dim_date.epi_week,
-        CASE
-            WHEN linelist.syndrome IS NULL THEN 'Community Led Total Sanitation'
-            ELSE linelist.syndrome
-        END AS syndrome,
-        disease,
+        'Community Led Total Sanitation'::text AS syndrome,
+        'Community Led Total Sanitation'::text AS disease,
         type_of_case,
         country,
         county,
         subcounty,
-        CASE
-            WHEN linelist.case_date IS NOT NULL THEN 1
-            WHEN linelist.confirmed = 1 THEN 1
-            ELSE 0
-        END AS cases,
+        CASE WHEN linelist.case_date IS NOT NULL THEN 1 ELSE 0 END AS cases,
+        total,
         suspected,
         tested,
         confirmed,
@@ -72,26 +60,19 @@ WITH case_linelist_by_date_acute_flaccid_paralysis AS (
         died,
         current_date AS load_date
     FROM {{ ref('dim_date') }} AS dim_date
-    LEFT JOIN {{ ref('fct_case_linelist') }} AS linelist ON dim_date.case_date = linelist.case_date AND linelist.syndrome = 'Community Led Total Sanitation'
-    WHERE linelist.confirmed = 1
+    LEFT JOIN {{ ref('fct_case_linelist_community_led_total_sanitation') }} AS linelist ON dim_date.case_date = linelist.case_date AND linelist.total = 1 AND linelist.confirmed = 1
 ), case_linelist_by_date_diarrhoeal_diseases AS (
     SELECT
         dim_date.case_date,
         dim_date.epi_week,
-        CASE
-            WHEN linelist.syndrome IS NULL THEN 'Diarrhoeal Disease'
-            ELSE linelist.syndrome
-        END AS syndrome,
+        'Diarrhoeal Disease'::text AS syndrome,
         disease,
         type_of_case,
         country,
         county,
         subcounty,
-        CASE
-            WHEN linelist.case_date IS NOT NULL THEN 1
-            WHEN linelist.confirmed = 1 THEN 1
-            ELSE 0
-        END AS cases,
+        CASE WHEN linelist.case_date IS NOT NULL THEN 1 ELSE 0 END AS cases,
+        total,
         suspected,
         tested,
         confirmed,
@@ -100,26 +81,19 @@ WITH case_linelist_by_date_acute_flaccid_paralysis AS (
         died,
         current_date AS load_date
     FROM {{ ref('dim_date') }} AS dim_date
-    LEFT JOIN {{ ref('fct_case_linelist') }} AS linelist ON dim_date.case_date = linelist.case_date AND linelist.syndrome = 'Diarrhoeal Disease'
-    WHERE linelist.confirmed = 1
+    LEFT JOIN {{ ref('fct_case_linelist_diarrhoeal_disease') }} AS linelist ON dim_date.case_date = linelist.case_date AND linelist.total = 1 AND linelist.confirmed = 1
 ), case_linelist_by_date_measles AS (
     SELECT
         dim_date.case_date,
         dim_date.epi_week,
         syndrome,
-        CASE
-            WHEN linelist.disease IS NULL THEN 'Measles'
-            ELSE linelist.disease
-        END AS disease,
+        'Measles'::text AS disease,
         type_of_case,
         country,
         county,
         subcounty,
-        CASE
-            WHEN linelist.case_date IS NOT NULL THEN 1
-            WHEN linelist.confirmed = 1 THEN 1
-            ELSE 0
-        END AS cases,
+        CASE WHEN linelist.case_date IS NOT NULL THEN 1 ELSE 0 END AS cases,
+        total,
         suspected,
         tested,
         confirmed,
@@ -128,26 +102,19 @@ WITH case_linelist_by_date_acute_flaccid_paralysis AS (
         died,
         current_date AS load_date
     FROM {{ ref('dim_date') }} AS dim_date
-    LEFT JOIN {{ ref('fct_case_linelist') }} AS linelist ON dim_date.case_date = linelist.case_date AND linelist.disease = 'Measles'
-    WHERE linelist.confirmed = 1
+    LEFT JOIN {{ ref('fct_case_linelist_measles') }} AS linelist ON dim_date.case_date = linelist.case_date AND linelist.total = 1 AND linelist.confirmed = 1
 ), case_linelist_by_date_meningitis AS (
     SELECT
         dim_date.case_date,
         dim_date.epi_week,
         syndrome,
-        CASE
-            WHEN linelist.disease IS NULL THEN 'Meningitis'
-            ELSE linelist.disease
-        END AS disease,
+        'Meningitis'::text AS disease,
         type_of_case,
         country,
         county,
         subcounty,
-        CASE
-            WHEN linelist.case_date IS NOT NULL THEN 1
-            WHEN linelist.confirmed = 1 THEN 1
-            ELSE 0
-        END AS cases,
+        CASE WHEN linelist.case_date IS NOT NULL THEN 1 ELSE 0 END AS cases,
+        total,
         suspected,
         tested,
         confirmed,
@@ -156,26 +123,19 @@ WITH case_linelist_by_date_acute_flaccid_paralysis AS (
         died,
         current_date AS load_date
     FROM {{ ref('dim_date') }} AS dim_date
-    LEFT JOIN {{ ref('fct_case_linelist') }} AS linelist ON dim_date.case_date = linelist.case_date AND linelist.disease = 'Meningitis'
-    WHERE linelist.confirmed = 1
+    LEFT JOIN {{ ref('fct_case_linelist_meningitis') }} AS linelist ON dim_date.case_date = linelist.case_date AND linelist.total = 1 AND linelist.confirmed = 1
 ), case_linelist_by_date_monkey_pox AS (
     SELECT
         dim_date.case_date,
         dim_date.epi_week,
         syndrome,
-        CASE
-            WHEN linelist.disease IS NULL THEN 'Monkey Pox'
-            ELSE linelist.disease
-        END AS disease,
+        'Monkey Pox'::text AS disease,
         type_of_case,
         country,
         county,
         subcounty,
-        CASE
-            WHEN linelist.case_date IS NOT NULL THEN 1
-            WHEN linelist.confirmed = 1 THEN 1
-            ELSE 0
-        END AS cases,
+        CASE WHEN linelist.case_date IS NOT NULL THEN 1 ELSE 0 END AS cases,
+        total,
         suspected,
         tested,
         confirmed,
@@ -184,26 +144,19 @@ WITH case_linelist_by_date_acute_flaccid_paralysis AS (
         died,
         current_date AS load_date
     FROM {{ ref('dim_date') }} AS dim_date
-    LEFT JOIN {{ ref('fct_case_linelist') }} AS linelist ON dim_date.case_date = linelist.case_date AND linelist.disease = 'Monkey Pox'
-    WHERE linelist.confirmed = 1
+    LEFT JOIN {{ ref('fct_case_linelist_mpox') }} AS linelist ON dim_date.case_date = linelist.case_date AND linelist.total = 1 AND linelist.confirmed = 1
 ), case_linelist_by_date_neonatal_tetanus AS (
     SELECT
         dim_date.case_date,
         dim_date.epi_week,
         syndrome,
-        CASE
-            WHEN linelist.disease IS NULL THEN 'Neonatal Tetanus'
-            ELSE linelist.disease
-        END AS disease,
+        'Neonatal Tetanus'::text AS disease,
         type_of_case,
         country,
         county,
         subcounty,
-        CASE
-            WHEN linelist.case_date IS NOT NULL THEN 1
-            WHEN linelist.confirmed = 1 THEN 1
-            ELSE 0
-        END AS cases,
+        CASE WHEN linelist.case_date IS NOT NULL THEN 1 ELSE 0 END AS cases,
+        total,
         suspected,
         tested,
         confirmed,
@@ -212,26 +165,19 @@ WITH case_linelist_by_date_acute_flaccid_paralysis AS (
         died,
         current_date AS load_date
     FROM {{ ref('dim_date') }} AS dim_date
-    LEFT JOIN {{ ref('fct_case_linelist') }} AS linelist ON dim_date.case_date = linelist.case_date AND linelist.disease = 'Neonatal Tetanus'
-    WHERE linelist.confirmed = 1
+    LEFT JOIN {{ ref('fct_case_linelist_neonatal_tetanus') }} AS linelist ON dim_date.case_date = linelist.case_date AND linelist.total = 1 AND linelist.confirmed = 1
 ), case_linelist_by_date_rabies AS (
     SELECT
         dim_date.case_date,
         dim_date.epi_week,
         syndrome,
-        CASE
-            WHEN linelist.disease IS NULL THEN 'Rabies'
-            ELSE linelist.disease
-        END AS disease,
+        'Rabies'::text AS disease,
         type_of_case,
         country,
         county,
         subcounty,
-        CASE
-            WHEN linelist.case_date IS NOT NULL THEN 1
-            WHEN linelist.confirmed = 1 THEN 1
-            ELSE 0
-        END AS cases,
+        CASE WHEN linelist.case_date IS NOT NULL THEN 1 ELSE 0 END AS cases,
+        total,
         suspected,
         tested,
         confirmed,
@@ -240,26 +186,19 @@ WITH case_linelist_by_date_acute_flaccid_paralysis AS (
         died,
         current_date AS load_date
     FROM {{ ref('dim_date') }} AS dim_date
-    LEFT JOIN {{ ref('fct_case_linelist') }} AS linelist ON dim_date.case_date = linelist.case_date AND linelist.disease = 'Rabies'
-    WHERE linelist.confirmed = 1
+    LEFT JOIN {{ ref('fct_case_linelist_rabies') }} AS linelist ON dim_date.case_date = linelist.case_date AND linelist.total = 1 AND linelist.confirmed = 1
 ), case_linelist_by_date_respiratory_syndrome AS (
     SELECT
         dim_date.case_date,
         dim_date.epi_week,
-        CASE
-            WHEN linelist.syndrome IS NULL THEN 'Respiratory Syndrome'
-            ELSE linelist.syndrome
-        END AS syndrome,
+        'Respiratory Syndrome'::text AS syndrome,
         disease,
         type_of_case,
         country,
         county,
         subcounty,
-        CASE
-            WHEN linelist.case_date IS NOT NULL THEN 1
-            WHEN linelist.confirmed = 1 THEN 1
-            ELSE 0
-        END AS cases,
+        CASE WHEN linelist.case_date IS NOT NULL THEN 1 ELSE 0 END AS cases,
+        total,
         suspected,
         tested,
         confirmed,
@@ -268,26 +207,19 @@ WITH case_linelist_by_date_acute_flaccid_paralysis AS (
         died,
         current_date AS load_date
     FROM {{ ref('dim_date') }} AS dim_date
-    LEFT JOIN {{ ref('fct_case_linelist') }} AS linelist ON dim_date.case_date = linelist.case_date AND linelist.syndrome = 'Respiratory Syndrome'
-    WHERE linelist.confirmed = 1
+    LEFT JOIN {{ ref('fct_case_linelist_respiratory_syndrome') }} AS linelist ON dim_date.case_date = linelist.case_date AND linelist.total = 1 AND linelist.confirmed = 1
 ), case_linelist_by_date_sampling_form_for_fortified_foods AS (
     SELECT
         dim_date.case_date,
         dim_date.epi_week,
-        CASE
-            WHEN linelist.syndrome IS NULL THEN 'Sampling Form for Fortified Foods'
-            ELSE linelist.syndrome
-        END AS syndrome,
-        disease,
+        'Sampling Form for Fortified Foods'::text AS syndrome,
+        'Sampling Form for Fortified Foods'::text AS disease,
         type_of_case,
         country,
         county,
         subcounty,
-        CASE
-            WHEN linelist.case_date IS NOT NULL THEN 1
-            WHEN linelist.confirmed = 1 THEN 1
-            ELSE 0
-        END AS cases,
+        CASE WHEN linelist.case_date IS NOT NULL THEN 1 ELSE 0 END AS cases,
+        total,
         suspected,
         tested,
         confirmed,
@@ -296,26 +228,19 @@ WITH case_linelist_by_date_acute_flaccid_paralysis AS (
         died,
         current_date AS load_date
     FROM {{ ref('dim_date') }} AS dim_date
-    LEFT JOIN {{ ref('fct_case_linelist') }} AS linelist ON dim_date.case_date = linelist.case_date AND linelist.syndrome = 'Sampling Form for Fortified Foods'
-    WHERE linelist.confirmed = 1
+    LEFT JOIN {{ ref('fct_case_linelist_sampling_form_for_fortified_foods') }} AS linelist ON dim_date.case_date = linelist.case_date AND linelist.total = 1 AND linelist.confirmed = 1
 ), case_linelist_by_date_viral_hemorrhagic_fever AS (
     SELECT
         dim_date.case_date,
         dim_date.epi_week,
-        CASE
-            WHEN linelist.syndrome IS NULL THEN 'VHF'
-            ELSE linelist.syndrome
-        END AS syndrome,
+        'VHF'::text AS syndrome,
         disease,
         type_of_case,
         country,
         county,
         subcounty,
-        CASE
-            WHEN linelist.case_date IS NOT NULL THEN 1
-            WHEN linelist.confirmed = 1 THEN 1
-            ELSE 0
-        END AS cases,
+        CASE WHEN linelist.case_date IS NOT NULL THEN 1 ELSE 0 END AS cases,
+        total,
         suspected,
         tested,
         confirmed,
@@ -324,8 +249,7 @@ WITH case_linelist_by_date_acute_flaccid_paralysis AS (
         died,
         current_date AS load_date
     FROM {{ ref('dim_date') }} AS dim_date
-    LEFT JOIN {{ ref('fct_case_linelist') }} AS linelist ON dim_date.case_date = linelist.case_date AND linelist.syndrome = 'VHF'
-    WHERE linelist.confirmed = 1
+    LEFT JOIN {{ ref('fct_case_linelist_viral_hemorrhagic_fever') }} AS linelist ON dim_date.case_date = linelist.case_date AND linelist.total = 1 AND linelist.confirmed = 1
 )
 
 SELECT * FROM case_linelist_by_date_acute_flaccid_paralysis
