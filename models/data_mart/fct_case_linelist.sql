@@ -78,5 +78,6 @@
         {{ base_columns | join(',\n        ') }},
         '{{ table }}' AS source_table
     FROM {{ table }}
+    WHERE total > 0
     {% if not loop.last %}UNION ALL{% endif %}
 {% endfor %}

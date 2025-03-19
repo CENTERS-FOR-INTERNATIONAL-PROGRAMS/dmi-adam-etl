@@ -45,7 +45,7 @@ SELECT
     location_latitude,
     location_longitude,
     syndrome,
-    'Marburg'::text AS disease,
+    'Marburg Preparedness'::text AS disease,
     '' AS country,
     county,
     '' AS subcounty,

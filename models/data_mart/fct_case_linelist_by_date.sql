@@ -9,6 +9,7 @@
         {'columns': ['country']},
         {'columns': ['county']},
         {'columns': ['subcounty']},
+        {'columns': ['total']},
         {'columns': ['suspected']},
         {'columns': ['tested']},
         {'columns': ['confirmed']},
@@ -36,6 +37,7 @@ WITH case_linelist_by_date_acute_flaccid_paralysis AS (
             WHEN linelist.confirmed = 1 THEN 1
             ELSE 0
         END AS cases,
+        total,
         suspected,
         tested,
         confirmed,
@@ -64,6 +66,7 @@ WITH case_linelist_by_date_acute_flaccid_paralysis AS (
             WHEN linelist.confirmed = 1 THEN 1
             ELSE 0
         END AS cases,
+        total,
         suspected,
         tested,
         confirmed,
@@ -92,6 +95,7 @@ WITH case_linelist_by_date_acute_flaccid_paralysis AS (
             WHEN linelist.confirmed = 1 THEN 1
             ELSE 0
         END AS cases,
+        total,
         suspected,
         tested,
         confirmed,
@@ -120,6 +124,7 @@ WITH case_linelist_by_date_acute_flaccid_paralysis AS (
             WHEN linelist.confirmed = 1 THEN 1
             ELSE 0
         END AS cases,
+        total,
         suspected,
         tested,
         confirmed,
@@ -148,6 +153,7 @@ WITH case_linelist_by_date_acute_flaccid_paralysis AS (
             WHEN linelist.confirmed = 1 THEN 1
             ELSE 0
         END AS cases,
+        total,
         suspected,
         tested,
         confirmed,
@@ -176,6 +182,7 @@ WITH case_linelist_by_date_acute_flaccid_paralysis AS (
             WHEN linelist.confirmed = 1 THEN 1
             ELSE 0
         END AS cases,
+        total,
         suspected,
         tested,
         confirmed,
@@ -204,6 +211,7 @@ WITH case_linelist_by_date_acute_flaccid_paralysis AS (
             WHEN linelist.confirmed = 1 THEN 1
             ELSE 0
         END AS cases,
+        total,
         suspected,
         tested,
         confirmed,
@@ -232,6 +240,7 @@ WITH case_linelist_by_date_acute_flaccid_paralysis AS (
             WHEN linelist.confirmed = 1 THEN 1
             ELSE 0
         END AS cases,
+        total,
         suspected,
         tested,
         confirmed,
@@ -260,6 +269,7 @@ WITH case_linelist_by_date_acute_flaccid_paralysis AS (
             WHEN linelist.confirmed = 1 THEN 1
             ELSE 0
         END AS cases,
+        total,
         suspected,
         tested,
         confirmed,
@@ -288,6 +298,7 @@ WITH case_linelist_by_date_acute_flaccid_paralysis AS (
             WHEN linelist.confirmed = 1 THEN 1
             ELSE 0
         END AS cases,
+        total,
         suspected,
         tested,
         confirmed,
@@ -316,6 +327,7 @@ WITH case_linelist_by_date_acute_flaccid_paralysis AS (
             WHEN linelist.confirmed = 1 THEN 1
             ELSE 0
         END AS cases,
+        total,
         suspected,
         tested,
         confirmed,
